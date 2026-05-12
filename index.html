@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapport dons — 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+.mail-table td.good { color: var(--green) !important; font-weight: normal; }
+.mail-table td.bad  { color: var(--red)  !important; font-weight: normal; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F7F6F2; --surface: #FFFFFF; --surface2: #F0EEE8;
+  --border: #E2DED4; --text: #1A1916; --text-muted: #7A7670; --text-hint: #B0ADA6;
+  --green: #1D7A5A; --green-bg: #EAF5EE; --red: #C0392B; --red-bg: #FDF0EE;
+  --blue: #1A4A7A; --blue-bg: #EAF0F8; --teal: #0F6E56; --teal-bg: #E1F5EE;
+  --amber: #7A4F0B; --amber-bg: #FDF3E1;
+  --zone-bg: #EBF3EF; --zone-border: #BDD7CC;
+  --font: 'DM Sans', sans-serif; --mono: 'DM Mono', monospace;
+}
+body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.6; padding: 40px 24px; min-height: 100vh; }
+.page { max-width: 940px; margin: 0 auto; }
+
+/* ── Tab nav ── */
+.tab-nav-bar { display: flex; gap: 4px; margin-bottom: 24px; padding: 5px; background: #E8EDF5; border: 1px solid #C6D3E8; border-radius: 12px; width: fit-content; margin-left: auto; margin-right: auto; }
+.tab-pill { font-family: var(--mono); font-size: 11px; font-weight: 500; padding: 7px 20px; border-radius: 8px; border: none; background: transparent; color: #5A739A; cursor: pointer; letter-spacing: 0.04em; transition: all 0.18s ease; }
+.tab-pill:hover { background: rgba(255,255,255,0.55); color: var(--blue); }
+.tab-pill.active { background: #FFFFFF; color: var(--blue); box-shadow: 0 1px 5px rgba(26,74,122,0.14); }
+.view-section { display: none; }
+.view-section.active { display: block; }
+
+/* ── RFM ── */
+.rfm-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.rfm-base-badge { font-family: var(--mono); font-size: 12px; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; }
+.rfm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.rfm-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px 14px; }
+.rfm-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.rfm-card-name { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+.rfm-card-count { font-size: 24px; font-weight: 500; font-family: var(--mono); letter-spacing: -0.5px; }
+.rfm-card-evo-row { display: flex; align-items: baseline; gap: 6px; margin-top: 5px; }
+.rfm-card-diff { font-size: 12px; font-weight: 500; font-family: var(--mono); }
+.rfm-card-pct  { font-size: 11px; font-family: var(--mono); }
+.rfm-card-diff.up, .rfm-card-pct.up { color: var(--green); }
+.rfm-card-diff.down, .rfm-card-pct.down { color: var(--red); }
+.rfm-card-no-prev { font-size: 10px; color: var(--text-hint); font-family: var(--mono); margin-top: 5px; }
+.rfm-prospect-card { background: var(--surface2); border: 1px dashed var(--border); border-radius: 10px; padding: 13px 16px; display: flex; align-items: center; gap: 14px; margin-top: 4px; }
+.rfm-prospect-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-hint); }
+.rfm-prospect-count { font-size: 20px; font-weight: 500; font-family: var(--mono); color: var(--text-muted); }
+.rfm-prospect-note { font-size: 10px; color: var(--text-hint); font-family: var(--mono); margin-left: auto; }
+.rs-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 12px; color: var(--text-hint); font-family: var(--mono); font-size: 12px; text-align: center; background: var(--surface); border: 1px dashed var(--border); border-radius: 12px; }
+
+/* ── RFM tooltip ── */
+.rfm-info { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: #E8EDF5; color: #5A739A; font-size: 10px; font-weight: 600; font-family: var(--font); cursor: help; flex-shrink: 0; line-height: 1; font-style: normal; transition: background 0.15s; }
+.rfm-info:hover { background: #C6D3E8; }
+.rfm-info .rfm-tooltip { display: none; position: absolute; top: calc(100% + 7px); right: 0; width: 230px; background: #1A1916; color: #F7F6F2; font-size: 11px; font-family: var(--font); line-height: 1.5; padding: 10px 12px; border-radius: 8px; z-index: 100; font-weight: 400; text-transform: none; letter-spacing: 0; box-shadow: 0 4px 16px rgba(0,0,0,0.22); }
+.rfm-info .rfm-tooltip::before { content: ''; position: absolute; top: -5px; right: 5px; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid #1A1916; }
+.rfm-tooltip-title { font-weight: 600; font-size: 11px; margin-bottom: 4px; }
+.rfm-tooltip-row { display: flex; gap: 4px; font-size: 10px; color: #B0ADA6; margin-top: 2px; }
+.rfm-tooltip-row span:first-child { color: #7A7670; min-width: 60px; }
+.rfm-info:hover .rfm-tooltip { display: block; }
+
+
+/* ── Month selector ── */
+.month-selector-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; padding: 14px 18px; background: #F3F0E8; border: 1px solid var(--border); border-radius: 12px; }
+.month-selector-bar label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); white-space: nowrap; }
+.month-pills { display: flex; gap: 6px; flex: 1; justify-content: center; flex-wrap: nowrap; }
+.month-pill { font-family: var(--mono); font-size: 11px; padding: 6px 14px; border-radius: 99px; border: 1px solid #E0DACD; background: rgba(255,255,255,0.6); color: var(--text-muted); cursor: pointer; transition: all 0.2s ease; }
+.month-pill:hover { border-color: #CBBFA8; background: #FAF7F0; color: var(--text); }
+.month-pill.active { background: #1A1916; color: #F7F6F2; border-color: #1A1916; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.month-pill.pending { border-style: dashed; color: var(--text-hint); }
+
+/* ── Header ── */
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.header-left h1 { font-size: 22px; font-weight: 500; letter-spacing: -0.3px; }
+.header-left p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.header-right { text-align: right; font-family: var(--mono); font-size: 11px; color: var(--text-hint); line-height: 1.8; }
+
+/* ── Section titles ── */
+.section-title { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-hint); margin: 28px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.section-title.first { margin-top: 0; }
+
+/* ── Zone filtrée wrapper ── */
+.filtered-wrapper { display: flex; gap: 14px; align-items: flex-start; }
+
+/* ── Sidebar entité ── */
+.entity-sidebar {
+  flex-shrink: 0; width: 108px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 10px; display: flex; flex-direction: column; gap: 6px;
+  position: sticky; top: 20px;
+}
+.sidebar-label { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-hint); text-align: center; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 2px; }
+.sidebar-pill { font-family: var(--font); font-size: 11px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; text-align: center; line-height: 1.3; transition: all 0.18s ease; }
+.sidebar-pill:hover { background: var(--surface2); color: var(--text); border-color: #C8C2BA; }
+.sidebar-pill.active { background: var(--zone-bg); color: var(--teal); border-color: var(--zone-border); font-weight: 500; }
+.sidebar-note { font-size: 9px; color: var(--text-hint); text-align: center; line-height: 1.4; margin-top: 4px; font-family: var(--mono); }
+
+/* ── Zone filtrée ── */
+.filtered-zone { flex: 1; background: var(--zone-bg); border: 1px solid var(--zone-border); border-radius: 12px; padding: 20px 18px 22px; min-width: 0; }
+.zone-filter-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 500; color: var(--teal); background: rgba(15,110,86,0.08); border: 1px solid var(--zone-border); border-radius: 20px; padding: 2px 10px; margin-bottom: 16px; font-family: var(--mono); }
+.zone-filter-badge .dot-filter { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+
+/* ── Entity cards ── */
+.entity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.entity-grid.single { grid-template-columns: 1fr; }
+.entity-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.entity-name { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 6px; }
+.entity-amount { font-size: 20px; font-weight: 500; font-family: var(--mono); letter-spacing: -0.5px; }
+.entity-details { font-size: 11px; color: var(--text-hint); margin-top: 4px; font-family: var(--mono); }
+
+/* ── Metrics ── */
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.metric { background: rgba(255,255,255,0.65); border: 1px solid rgba(189,215,204,0.6); border-radius: 8px; padding: 12px 14px; }
+.metric-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+.metric-value { font-size: 18px; font-weight: 500; font-family: var(--mono); letter-spacing: -0.4px; }
+
+/* ── Compare tables ── */
+.compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.compare-table thead th { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 0 10px 10px; text-align: right; border-bottom: 1px solid rgba(189,215,204,0.8); vertical-align: bottom; }
+.compare-table thead th:first-child { text-align: left; }
+.compare-table tbody td { padding: 9px 10px; text-align: right; border-bottom: 1px solid rgba(189,215,204,0.5); font-family: var(--mono); font-size: 12px; }
+.compare-table tbody td:first-child { text-align: left; font-family: var(--font); font-size: 12px; color: var(--text-muted); }
+.compare-table tbody tr:last-child td { border-bottom: none; }
+.compare-table tbody tr:hover td { background: rgba(255,255,255,0.45); }
+.delta-up   { color: var(--green); font-weight: 500; }
+.delta-down { color: var(--red);   font-weight: 500; }
+
+/* ── Year select ── */
+.th-year-wrap { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.year-select {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--teal);
+  background: rgba(15,110,86,0.1);
+  border: 1px solid var(--zone-border);
+  border-radius: 5px;
+  padding: 2px 3px 2px 6px;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.15s, box-shadow 0.15s;
+  -webkit-appearance: auto;
+  appearance: auto;
+}
+.year-select:hover { background: rgba(15,110,86,0.18); }
+.year-select:focus { box-shadow: 0 0 0 2px rgba(15,110,86,0.22); }
+
+/* ── Badges ── */
+.badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+.badge-event    { background: var(--blue-bg);  color: var(--blue);  }
+.badge-crowd    { background: var(--teal-bg);  color: var(--teal);  }
+.badge-campaign { background: var(--amber-bg); color: var(--amber); }
+
+/* ── Mail table ── */
+.mail-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.mail-table thead th { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 0 8px 8px; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.mail-table thead th:first-child, .mail-table thead th:nth-child(2) { text-align: left; }
+.mail-table tbody td { padding: 8px; text-align: right; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 11px; vertical-align: middle; }
+.mail-table tbody td:first-child { font-family: var(--font); font-size: 11px; color: var(--text-muted); text-align: left; }
+.mail-table tbody td:nth-child(2) { text-align: left; font-family: var(--font); }
+.mail-table tbody tr:last-child td { border-bottom: none; background: var(--surface2); font-weight: 500; }
+.mail-table tbody tr:not(:last-child):hover { background: var(--surface2); }
+
+/* ── Pending notice ── */
+.pending-notice { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--surface); border: 1px dashed var(--border); border-radius: 10px; color: var(--text-hint); font-size: 12px; font-family: var(--mono); }
+.pending-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-hint); flex-shrink: 0; }
+
+/* ── Tempo ── */
+.tempo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.tempo-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.tempo-card.highlight { border-color: #A8C5E0; background: #F0F6FC; }
+.tempo-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 6px; }
+.tempo-value { font-size: 20px; font-weight: 500; font-family: var(--mono); letter-spacing: -0.5px; }
+.tempo-sub { font-size: 11px; color: var(--text-hint); margin-top: 4px; font-family: var(--mono); }
+.tempo-bar-wrap { margin: 16px 0 6px; }
+.tempo-bar-labels { display: flex; justify-content: space-between; font-size: 10px; font-family: var(--mono); color: var(--text-hint); margin-bottom: 6px; }
+.tempo-bar-track { height: 8px; background: var(--surface2); border-radius: 99px; overflow: hidden; position: relative; }
+.tempo-bar-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 99px; transition: width 0.4s ease; }
+.tempo-bar-fill.f-ref { background: #B0ADA6; }
+.tempo-bar-fill.f2026 { background: #1D7A5A; opacity: 0.85; }
+.tempo-bar-legend { display: flex; gap: 16px; margin-top: 8px; font-size: 10px; color: var(--text-muted); font-family: var(--mono); }
+.tempo-bar-legend span { display: flex; align-items: center; gap: 5px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dot-ref  { background: #B0ADA6; }
+.dot-2026 { background: #1D7A5A; opacity: 0.85; }
+.tempo-projection { display: flex; align-items: baseline; gap: 8px; margin-top: 14px; padding: 10px 14px; background: var(--surface2); border-radius: 8px; flex-wrap: wrap; }
+.tempo-projection-label { font-size: 11px; color: var(--text-muted); }
+.tempo-projection-value { font-size: 17px; font-weight: 500; font-family: var(--mono); letter-spacing: -0.4px; }
+.tempo-projection-note { font-size: 10px; color: var(--text-hint); font-family: var(--mono); margin-left: auto; }
+
+/* ── RS platform bar ── */
+.rs-platform-bar { display: flex; gap: 6px; margin-bottom: 20px; justify-content: center; }
+.rs-platform-pill { font-family: var(--mono); font-size: 11px; font-weight: 500; padding: 6px 18px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.18s ease; }
+.rs-platform-pill:hover { background: var(--surface2); }
+.rs-platform-pill.li.active { background: #EEF3FA; color: #1A5A9A; border-color: #A8C0DC; }
+.rs-platform-pill.fb.active { background: #EEF0FB; color: #1A3A8A; border-color: #A8B4DC; }
+.rs-platform-pill.ig.active { background: #FBEEF6; color: #8A2A6A; border-color: #DCA8CC; }
+.rs-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.rs-table thead th { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 0 8px 8px; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.rs-table thead th:nth-child(2) { text-align: left; }
+.rs-table tbody td { padding: 7px 8px; text-align: right; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 11px; }
+.rs-table tbody tr:hover td { background: var(--surface2); }
+.rs-total-row td { background: var(--surface2) !important; font-weight: 500; border-top: 1px solid var(--border); }
+.rs-tops { display: flex; flex-direction: column; gap: 10px; }
+.rs-top-card { display: flex; gap: 14px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px 16px; }
+.rs-top-rank { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--text-muted); font-family: var(--mono); margin-top: 2px; }
+.rs-top-content { flex: 1; min-width: 0; }
+.rs-top-post { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+.rs-top-why, .rs-top-action { font-size: 11px; color: var(--text-muted); margin-top: 3px; display: flex; gap: 6px; }
+.rs-top-why span, .rs-top-action span { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-hint); white-space: nowrap; min-width: 68px; }
+
+/* ── Tempo sidebar ── */
+.tempo-wrapper { display: flex; gap: 14px; align-items: flex-start; }
+.tempo-sidebar {
+  flex-shrink: 0; width: 80px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 8px; display: flex; flex-direction: column; gap: 6px;
+  position: sticky; top: 20px;
+}
+.tempo-sidebar-label { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-hint); text-align: center; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 2px; }
+.tempo-year-pill { font-family: var(--mono); font-size: 12px; padding: 7px 6px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; text-align: center; line-height: 1; transition: all 0.18s ease; }
+.tempo-year-pill:hover { background: var(--surface2); color: var(--text); border-color: #C8C2BA; }
+.tempo-year-pill.active { background: var(--zone-bg); color: var(--teal); border-color: var(--zone-border); font-weight: 500; }
+.tempo-content { flex: 1; min-width: 0; }
+
+/* ── Remarks ── */
+.remarks-box { margin-top: 30px; padding: 15px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.remarks-title { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 10px; }
+.remarks-content p { margin: 5px 0; min-height: 20px; }
+
+/* ── Footer ── */
+.footer-note { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-hint); display: flex; justify-content: space-between; align-items: center; }
+.template-badge { font-size: 10px; font-weight: 500; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 20px; font-family: var(--mono); }
+
+@media print { body { background: white; padding: 20px; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Tab nav -->
+  <div class="tab-nav-bar">
+    <button class="tab-pill active" data-tab="dons"  onclick="setTab('dons')">Data dons</button>
+    <button class="tab-pill"        data-tab="email" onclick="setTab('email')">Data E-mail</button>
+    <button class="tab-pill"        data-tab="rs"    onclick="setTab('rs')">Data RS</button>
+    <button class="tab-pill"        data-tab="rfm"   onclick="setTab('rfm')">RFM</button>
+  </div>
+
+  <!-- Month selector -->
+  <div class="month-selector-bar">
+    <label>Mois</label>
+    <div class="month-pills" id="pills"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1 id="h-title">Rapport des dons</h1>
+      <p>Association Oeuvre de Secours aux Enfants &amp; Fondation OSE-MES</p>
+    </div>
+    <div class="header-right" id="h-meta"></div>
+  </div>
+
+  <!-- ══ VIEW : DATA DONS ══ -->
+  <div id="view-dons" class="view-section active">
+
+  <!-- Zone filtrée -->
+  <div class="filtered-wrapper">
+    <div class="entity-sidebar">
+      <div class="sidebar-label">Entité</div>
+      <button class="sidebar-pill active" data-filter="total" onclick="setFilter('total')">Les deux</button>
+      <button class="sidebar-pill" data-filter="asso"  onclick="setFilter('asso')">Association OSE</button>
+      <button class="sidebar-pill" data-filter="fond"  onclick="setFilter('fond')">Fondation OSE-MES</button>
+      <div class="sidebar-note" id="sidebar-note">consolidé</div>
+    </div>
+
+    <div class="filtered-zone">
+      <div class="zone-filter-badge">
+        <span class="dot-filter"></span>
+        <span id="zone-badge-text">Association + Fondation</span>
+      </div>
+
+      <!-- Résultats du mois -->
+      <div class="section-title first" id="s-resultats"></div>
+      <div class="entity-grid" id="entity-grid">
+        <div class="entity-card" id="card-ose">
+          <div class="entity-name">Association OSE</div>
+          <div class="entity-amount" id="ose-collecte"></div>
+          <div class="entity-details" id="ose-details"></div>
+        </div>
+        <div class="entity-card" id="card-fond">
+          <div class="entity-name">Fondation OSE-MES</div>
+          <div class="entity-amount" id="fond-collecte"></div>
+          <div class="entity-details" id="fond-details"></div>
+        </div>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric"><div class="metric-label" id="m-label-col">Collecte totale</div><div class="metric-value" id="m-collecte"></div></div>
+        <div class="metric"><div class="metric-label">Nombre de dons</div><div class="metric-value" id="m-dons"></div></div>
+        <div class="metric"><div class="metric-label">Don moyen</div><div class="metric-value" id="m-moyen"></div></div>
+      </div>
+
+      <!-- Comparaison mensuelle -->
+      <div class="section-title" id="s-comp"></div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>
+              <div class="th-year-wrap">
+                <span id="th-n1-prefix"></span>
+                <select id="sel-ref-year" class="year-select" onchange="setRefYear(this.value)">
+                  <option value="2025">2025</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                </select>
+              </div>
+            </th>
+            <th id="th-n"></th>
+            <th>Évolution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Collecte</td><td id="c-col-n1"></td><td id="c-col-n"></td><td id="c-col-d"></td></tr>
+          <tr><td>Nombre de dons</td><td id="c-don-n1"></td><td id="c-don-n"></td><td id="c-don-d"></td></tr>
+          <tr><td>Don moyen</td><td id="c-moy-n1"></td><td id="c-moy-n"></td><td id="c-moy-d"></td></tr>
+        </tbody>
+      </table>
+
+      <!-- Cumul YTD -->
+      <div class="section-title" id="s-ytd"></div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th id="th-ytd-n1"></th>
+            <th id="th-ytd-n"></th>
+            <th>Évolution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Collecte cumulée</td><td id="y-col-n1"></td><td id="y-col-n"></td><td id="y-col-d"></td></tr>
+          <tr><td>Nombre de dons</td><td id="y-don-n1"></td><td id="y-don-n"></td><td id="y-don-d"></td></tr>
+        </tbody>
+      </table>
+
+    </div><!-- /filtered-zone -->
+  </div><!-- /filtered-wrapper -->
+
+  <!-- Temps de passage -->
+  <div class="section-title" id="s-tempo"></div>
+  <div class="tempo-wrapper">
+    <div class="tempo-sidebar">
+      <div class="tempo-sidebar-label">Réf.</div>
+      <button class="tempo-year-pill active" data-tempoyear="2025" onclick="setTempoRef(2025)">2025</button>
+      <button class="tempo-year-pill"        data-tempoyear="2024" onclick="setTempoRef(2024)">2024</button>
+      <button class="tempo-year-pill"        data-tempoyear="2023" onclick="setTempoRef(2023)">2023</button>
+    </div>
+    <div class="tempo-content">
+      <div class="tempo-grid">
+        <div class="tempo-card">
+          <div class="tempo-label" id="tp-label-n1"></div>
+          <div class="tempo-value" id="tp-val-n1"></div>
+          <div class="tempo-sub" id="tp-sub-n1"></div>
+        </div>
+        <div class="tempo-card highlight">
+          <div class="tempo-label" id="tp-label-n"></div>
+          <div class="tempo-value" id="tp-val-n"></div>
+          <div class="tempo-sub" id="tp-sub-n"></div>
+        </div>
+        <div class="tempo-card">
+          <div class="tempo-label" id="tp-label-ref"></div>
+          <div class="tempo-value" id="tp-val-ref"></div>
+          <div class="tempo-sub">base de calcul</div>
+        </div>
+      </div>
+      <div class="tempo-bar-wrap">
+        <div class="tempo-bar-labels"><span>0 €</span><span id="tp-bar-max"></span></div>
+        <div class="tempo-bar-track">
+          <div class="tempo-bar-fill f-ref"  id="bar-ref"  style="width:0%"></div>
+          <div class="tempo-bar-fill f2026"  id="bar-2026" style="width:0%"></div>
+        </div>
+        <div class="tempo-bar-legend">
+          <span><span class="dot dot-ref"></span><span id="leg-ref"></span></span>
+          <span><span class="dot dot-2026"></span><span id="leg-2026"></span></span>
+        </div>
+      </div>
+      <div class="tempo-projection">
+        <span class="tempo-projection-label">
+          Projection annuelle 2026 <span id="tp-proj-rythme"></span>
+          <span style="font-size:10px;color:var(--text-hint);font-family:var(--mono);">· association + fondation confondues</span>
+        </span>
+        <span class="tempo-projection-value" id="tp-proj"></span>
+        <span class="tempo-projection-note" id="tp-proj-note"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remarques -->
+  <div class="remarks-box">
+    <div class="remarks-title">Remarques de l'équipe</div>
+    <div class="remarks-content"><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p></div>
+  </div>
+
+  </div><!-- /view-dons -->
+
+  <!-- ══ VIEW : DATA E-MAIL ══ -->
+  <div id="view-email" class="view-section">
+    <div class="section-title first" id="s-email"></div>
+    <div id="email-container"></div>
+  </div>
+
+  <!-- ══ VIEW : DATA RS ══ -->
+  <div id="view-rs" class="view-section">
+    <div class="rs-platform-bar">
+      <button class="rs-platform-pill li active" data-rs="linkedin"   onclick="setRSPlatform('linkedin')">LinkedIn</button>
+      <button class="rs-platform-pill fb"         data-rs="facebook"   onclick="setRSPlatform('facebook')">Facebook</button>
+      <button class="rs-platform-pill ig"         data-rs="instagram"  onclick="setRSPlatform('instagram')">Instagram</button>
+    </div>
+    <div id="rs-container"></div>
+  </div>
+
+  <!-- ══ VIEW : RFM ══ -->
+  <div id="view-rfm" class="view-section">
+    <div class="section-title first" id="s-rfm"></div>
+    <div id="rfm-container"></div>
+  </div>
+
+  <div class="footer-note">
+    <span>OSE — Usage interne uniquement</span>
+    <span class="template-badge">template v4 · comparaison multi-années</span>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  RÉFÉRENCES TEMPO — totaux annuels consolidés par année
+// ═══════════════════════════════════════════════════════════════
+const TEMPO_REFS = {
+  2025: 1386925.28,
+  2024: 1227601.20,
+  2023: 1534999.60,
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  HISTORIQUE — données mensuelles par année et entité
+// ═══════════════════════════════════════════════════════════════
+const ALL_MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+
+const HIST = {
+  2025: {
+    Janvier:    { ose: { raw:  8420.50, dons: 110 }, fond: { raw:     0.00, dons:   0 } },
+    Février:    { ose: { raw: 29200.50, dons: 254 }, fond: { raw:   750.00, dons:   1 } },
+    Mars:       { ose: { raw: 27669.20, dons: 226 }, fond: { raw:    50.00, dons:   1 } },
+    Avril:      { ose: { raw: 25009.50, dons: 257 }, fond: { raw: 24130.00, dons:  20 } },
+    Mai:        { ose: { raw: 84615.50, dons: 210 }, fond: { raw:240915.60, dons: 205 } },
+    Juin:       { ose: { raw: 32155.60, dons: 198 }, fond: { raw:170770.00, dons: 119 } },
+    Juillet:    { ose: { raw: 13254.50, dons: 124 }, fond: { raw:150146.80, dons: 110 } },
+    Août:       { ose: { raw:  5738.50, dons: 102 }, fond: { raw:     0.00, dons:   0 } },
+    Septembre:  { ose: { raw: 75890.50, dons: 215 }, fond: { raw:  2472.00, dons:  11 } },
+    Octobre:    { ose: { raw: 70885.00, dons: 349 }, fond: { raw:  2658.00, dons:  13 } },
+    Novembre:   { ose: { raw: 47964.50, dons: 248 }, fond: { raw: 16722.00, dons:  17 } },
+    Décembre:   { ose: { raw:337757.10, dons:1115 }, fond: { raw: 19750.00, dons:  28 } },
+  },
+  2024: {
+    Janvier:    { ose: { raw:  8220.50, dons: 114 }, fond: { raw:     0.00, dons:  0 } },
+    Février:    { ose: { raw: 24554.50, dons: 245 }, fond: { raw:   604.00, dons:  2 } },
+    Mars:       { ose: { raw: 30759.50, dons: 217 }, fond: { raw:  6420.00, dons:  5 } },
+    Avril:      { ose: { raw: 17731.50, dons: 177 }, fond: { raw: 38892.00, dons: 39 } },
+    Mai:        { ose: { raw: 22136.40, dons: 210 }, fond: { raw:335325.00, dons:256 } },
+    Juin:       { ose: { raw: 21104.50, dons: 176 }, fond: { raw:247530.40, dons:110 } },
+    Juillet:    { ose: { raw: 11069.50, dons: 151 }, fond: { raw: 29931.00, dons: 10 } },
+    Août:       { ose: { raw:  7645.50, dons:  98 }, fond: { raw:   600.00, dons:  5 } },
+    Septembre:  { ose: { raw: 24093.50, dons: 175 }, fond: { raw:   190.00, dons:  5 } },
+    Octobre:    { ose: { raw: 66010.50, dons: 498 }, fond: { raw:   982.00, dons:  6 } },
+    Novembre:   { ose: { raw: 39646.50, dons: 199 }, fond: { raw:  1500.00, dons:  3 } },
+    Décembre:   { ose: { raw:252522.30, dons: 907 }, fond: { raw: 40132.00, dons: 51 } },
+  },
+  2023: {
+    Janvier:    { ose: { raw: 88698.50, dons: 131 }, fond: { raw:  3500.00, dons:   2 } },
+    Février:    { ose: { raw: 20308.50, dons: 265 }, fond: { raw:  2810.00, dons:   4 } },
+    Mars:       { ose: { raw: 26046.90, dons: 263 }, fond: { raw:  1576.00, dons:   7 } },
+    Avril:      { ose: { raw: 31605.50, dons: 217 }, fond: { raw: 78826.00, dons: 108 } },
+    Mai:        { ose: { raw: 63217.10, dons: 198 }, fond: { raw:372318.50, dons: 217 } },
+    Juin:       { ose: { raw: 23612.50, dons: 139 }, fond: { raw:283930.00, dons: 124 } },
+    Juillet:    { ose: { raw: 24038.50, dons: 166 }, fond: { raw:  2700.00, dons:  14 } },
+    Août:       { ose: { raw: 25145.50, dons: 113 }, fond: { raw:   446.00, dons:   6 } },
+    Septembre:  { ose: { raw: 61517.50, dons: 435 }, fond: { raw:  6771.00, dons:  14 } },
+    Octobre:    { ose: { raw: 27902.50, dons: 236 }, fond: { raw:   320.00, dons:   2 } },
+    Novembre:   { ose: { raw: 64400.50, dons: 252 }, fond: { raw:  4165.00, dons:   8 } },
+    Décembre:   { ose: { raw:242053.70, dons: 888 }, fond: { raw: 29090.00, dons:  33 } },
+  },
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  DONNÉES 2026 — mois en cours + YTD
+// ═══════════════════════════════════════════════════════════════
+const MOIS_DATA = {
+  Janvier: {
+    annee: "2026", periode: "Janv.", ytd_label: "Janv.",
+    ose:      { raw: 17894.00, dons: 308 },
+    fond:     { raw:  3500.00, dons:   2 },
+    ytd_ose:  { raw: 17894.00, dons: 308 },
+    ytd_fond: { raw:  3500.00, dons:   2 },
+    emails: [], emails_pending: true,
+  },
+  Février: {
+    annee: "2026", periode: "Janv.–Févr.", ytd_label: "Janv.–Févr.",
+    ose:      { raw: 33113.50, dons: 167 },
+    fond:     { raw: 15700.00, dons:   6 },
+    ytd_ose:  { raw: 51007.50, dons: 475 },
+    ytd_fond: { raw: 19200.00, dons:   8 },
+    emails: [
+      { objet: "Vous êtes invité(e) au Salon du Livre", type: "Evènement", date: "6/2",  dest: "4 627",  ouv: "55,5 %", clics: "4,4 %", dons: "1", collecte: "200,00 €", moyen: "200,00 €" },
+      { objet: "J-5 — Salon du Livre de l'OSE",         type: "Evènement", date: "11/2", dest: "3 297",  ouv: "43,2 %", clics: "5,4 %", dons: "0", collecte: "—",        moyen: "—"        },
+      { objet: "J-2 Salon du Livre — programme",        type: "Evènement", date: "13/2", dest: "4 608",  ouv: "48,5 %", clics: "2,5 %", dons: "0", collecte: "—",        moyen: "—"        },
+    ],
+    emails_total: { dest: "12 532", dons: "1", collecte: "200,00 €", moyen: "200,00 €" },
+    emails_pending: false,
+  },
+  Mars: {
+    annee: "2026", periode: "Janv.–Mars", ytd_label: "Janv.–Mars",
+    ose:      { raw: 24077.50, dons: 188 },
+    fond:     { raw:  6240.00, dons:   9 },
+    ytd_ose:  { raw: 75085.00, dons: 663 },
+    ytd_fond: { raw: 25440.00, dons:  17 },
+    emails: [
+      { objet: "Mir zaynen do !",                   type: "Evènement",    date: "4/3",  dest: "4 133",  ouv: "55,4 %", clics: "1,4 %",  dons: "6",  collecte: "1 218,00 €", moyen: "203,00 €"  },
+      { objet: "Le projet de Marie-Lyne",            type: "Crowdfunding", date: "10/3", dest: "4 836",  ouv: "48,9 %", clics: "10,2 %", dons: "13", collecte: "1 286,00 €", moyen: "98,92 €"   },
+      { objet: "On y est presque !",                 type: "Crowdfunding", date: "19/3", dest: "1 038",  ouv: "72,9 %", clics: "6,8 %",  dons: "11", collecte: "1 112,00 €", moyen: "101,09 €"  },
+      { objet: "Bonnes fêtes de Pessah",             type: "Campagne",     date: "27/3", dest: "11 629", ouv: "38,6 %", clics: "6,8 %",  dons: "9",  collecte: "923,00 €",   moyen: "102,56 €"  },
+      { objet: "Bonnes fêtes de Pessah (seg.)",      type: "Campagne",     date: "28/3", dest: "142",    ouv: "53,9 %", clics: "7,9 %",  dons: "0",  collecte: "—",          moyen: "—"         },
+      { objet: "Objectif de financement atteint !", type: "Crowdfunding", date: "31/3", dest: "4 753",  ouv: "46,4 %", clics: "4,6 %",  dons: "0",  collecte: "—",          moyen: "—"         },
+    ],
+    emails_total: { dest: "26 531", dons: "39", collecte: "4 539,00 €", moyen: "116,38 €" },
+    emails_pending: false,
+  },
+  Avril: {
+    annee: "2026", periode: "Janv.–Avril", ytd_label: "Janv.–Avril",
+    ose:      { raw: 30605.50, dons: 254 },
+    fond:     { raw: 36266.00, dons:  39 },
+    ytd_ose:  { raw: 107620.50, dons: 938 },
+    ytd_fond: { raw:  66706.00, dons:  57 },
+    emails: [
+      { objet: "Impôt sur le revenu 2026 : le portail est ouvert !",    type: "Campagne", date: "10/4", dest: "4 955", ouv: "48,3 %", clics: "1,5 %",  dons: "4",  collecte: "318,00 €",   moyen: "79,50 €"  },
+      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · IFI",       type: "Campagne", date: "20/4", dest: "472",   ouv: "54,3 %", clics: "4,5 %",  dons: "0",  collecte: "—",          moyen: "—"        },
+      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · IR",        type: "Campagne", date: "20/4", dest: "4 126", ouv: "44,8 %", clics: "2,6 %",  dons: "6",  collecte: "422,00 €",   moyen: "70,33 €"  },
+      { objet: "Message d'Arié Flack — Appel à votre soutien · IFI",   type: "Campagne", date: "23/4", dest: "456",   ouv: "60,2 %", clics: "2,2 %",  dons: "0",  collecte: "—",          moyen: "—"        },
+      { objet: "Message d'Arié Flack — Appel à votre soutien · IR",    type: "Campagne", date: "23/4", dest: "4 096", ouv: "48,0 %", clics: "1,5 %",  dons: "10", collecte: "2 706,00 €", moyen: "270,60 €" },
+      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · All",       type: "Campagne", date: "23/4", dest: "331",   ouv: "43,5 %", clics: "2,5 %",  dons: "2",  collecte: "880,00 €",   moyen: "440,00 €" },
+      { objet: "Message d'Arié Flack — Appel à votre soutien · All",   type: "Campagne", date: "26/4", dest: "329",   ouv: "55,9 %", clics: "12,7 %", dons: "1",  collecte: "500,00 €",   moyen: "500,00 €" },
+      { objet: "Ensemble, brisons l'isolement de nos aînés · IFI",     type: "Campagne", date: "29/4", dest: "471",   ouv: "51,5 %", clics: "4,3 %",  dons: "0",  collecte: "—",          moyen: "—"        },
+      { objet: "Ensemble, brisons l'isolement de nos aînés · IR",      type: "Campagne", date: "29/4", dest: "4 295", ouv: "39,6 %", clics: "2,2 %",  dons: "3",  collecte: "254,00 €",   moyen: "84,67 €"  },
+    ],
+    emails_total: { dest: "19 531", dons: "26", collecte: "5 080,00 €", moyen: "195,38 €" },
+    emails_pending: false,
+  },
+  Mai:        { annee: "2026", periode: "Janv.–Mai",      ytd_label: "Janv.–Mai",      pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Juin:       { annee: "2026", periode: "Janv.–Juin",     ytd_label: "Janv.–Juin",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Juillet:    { annee: "2026", periode: "Janv.–Juil.",    ytd_label: "Janv.–Juil.",    pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Août:       { annee: "2026", periode: "Janv.–Août",     ytd_label: "Janv.–Août",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Septembre:  { annee: "2026", periode: "Janv.–Sept.",    ytd_label: "Janv.–Sept.",    pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Octobre:    { annee: "2026", periode: "Janv.–Oct.",     ytd_label: "Janv.–Oct.",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Novembre:   { annee: "2026", periode: "Janv.–Nov.",     ytd_label: "Janv.–Nov.",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Décembre:   { annee: "2026", periode: "Janv.–Déc.",     ytd_label: "Janv.–Déc.",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  CONSTANTES GLOBALES
+// ═══════════════════════════════════════════════════════════════
+const MOIS_ORDER  = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+const MOIS_ABBR   = { "Janvier": "Janv.", "Février": "Févr.", "Mars": "Mars", "Avril": "Avr.", "Mai": "Mai", "Juin": "Juin", "Juillet": "Juil.", "Août": "Août", "Septembre": "Sept.", "Octobre": "Oct.", "Novembre": "Nov.", "Décembre": "Déc." };
+const BADGE_CLASS = { "Evènement": "badge-event", "Crowdfunding": "badge-crowd", "Campagne": "badge-campaign" };
+
+// ═══════════════════════════════════════════════════════════════
+//  RFM — données de segmentation mensuelle
+// ═══════════════════════════════════════════════════════════════
+const RFM_META = [
+  { key: 'Champion',     label: 'Champion',        color: '#A05A00', bg: '#FEF5E6', bar: '#F5A623' },
+  { key: 'Fid_Loyaux',   label: 'Fidèles Loyaux',  color: '#1D7A5A', bg: '#E8F8F1', bar: '#27AE82' },
+  { key: 'Potentiels',   label: 'Potentiels',      color: '#0A6E50', bg: '#E1F5EE', bar: '#1ABC9C' },
+  { key: 'Nouveaux',     label: 'Nouveaux',        color: '#1A4A7A', bg: '#E8F0FA', bar: '#3498DB' },
+  { key: 'Revenus',      label: 'Revenus',         color: '#5A1A7A', bg: '#F3E8FA', bar: '#9B59B6' },
+  { key: 'Occasionnel',  label: 'Occasionnel',     color: '#7A6A0B', bg: '#FAFBE1', bar: '#D4AC0D' },
+  { key: 'Risque_fuite', label: 'Risque de fuite', color: '#9A3A08', bg: '#FEF0E6', bar: '#E67E22' },
+  { key: 'Endormis',     label: 'Endormis',        color: '#555555', bg: '#F0F0F0', bar: '#95A5A6' },
+  { key: 'Perdu',        label: 'Perdu',           color: '#C0392B', bg: '#FDF0EE', bar: '#E74C3C' },
+];
+
+const RFM_DATA = {
+  Mars: {
+    date: '30 mars 2026',
+    segments: { Champion: 471, Fid_Loyaux: 1175, Potentiels: 138, Nouveaux: 347, Revenus: 121, Occasionnel: 974, Risque_fuite: 156, Endormis: 302, Perdu: 7464 },
+    prospect: null,
+    total: 11148,
+  },
+  Avril: {
+    date: '30 avril 2026',
+    segments: { Champion: 421, Fid_Loyaux: 1196, Potentiels: 136, Nouveaux: 313, Revenus: 108, Occasionnel: 987, Risque_fuite: 152, Endormis: 272, Perdu: 7500 },
+    prospect: 10171,
+    total: 11085,
+  },
+};
+
+
+// ═══════════════════════════════════════════════════════════════
+//  DATA RS — réseaux sociaux
+// ═══════════════════════════════════════════════════════════════
+let currentRSPlatform = 'linkedin';
+
+const RS_DATA = {
+  linkedin: {
+    label: 'LinkedIn',
+    cols: ['Impressions','Likes','Partages','Commentaires','Enregistr.','Engagement'],
+    keys: ['imp','likes','shares','comments','saves','taux'],
+    mainMetric: 'imp', mainLabel: 'Impressions',
+    Janvier: {
+      posts: [
+        { date:'09/01', post:"Dans les livres — Save the date",          imp:2093, likes:55,  shares:9,  comments:458, saves:0, taux:24.94 },
+        { date:'19/01', post:"Belle année 2026",                          imp:711,  likes:30,  shares:2,  comments:62,  saves:2, taux:13.50 },
+        { date:'20/01', post:"Radio Shalom — Katy Hazan & Éric Ghozlan", imp:732,  likes:12,  shares:1,  comments:23,  saves:0, taux:4.92  },
+        { date:'22/01', post:"Rencontre Maire Paris Centre",               imp:1397, likes:29,  shares:2,  comments:114, saves:1, taux:10.45 },
+        { date:'27/01', post:"Journée mémoire Holocauste",                 imp:2747, likes:84,  shares:2,  comments:157, saves:4, taux:8.99  },
+      ],
+      total: { imp:7680, likes:210, shares:16, comments:814, saves:7, taux:13.63 },
+      tops: [{ post:"Dans les livres — Save the date", pourquoi:"Lien avec un event qui attire un gros public", action:"Lien avec l'actualité + timing de publication" }],
+    },
+    Février: {
+      posts: [
+        { date:'03/02', post:"Dans les livres — Changement d'adresse",         imp:820,  likes:22, shares:4,  comments:78,  saves:1, taux:12.80 },
+        { date:'05/02', post:"Dominique Versini x Éric Ghozlan",               imp:3223, likes:93, shares:7,  comments:548, saves:2, taux:20.17 },
+        { date:'09/02', post:"Décès Eli Elalouf",                              imp:6353, likes:84, shares:3,  comments:369, saves:7, taux:7.29  },
+        { date:'11/02', post:"Les auteurs de la Grande Librairie — Salon",      imp:681,  likes:23, shares:1,  comments:23,  saves:2, taux:7.20  },
+        { date:'11/02', post:"Dans les livres — rencontre Ginette Kolinka",     imp:842,  likes:28, shares:4,  comments:12,  saves:0, taux:5.23  },
+        { date:'18/02', post:"15 ans Café des Psaumes",                        imp:1733, likes:57, shares:2,  comments:930, saves:1, taux:57.13 },
+        { date:'19/02', post:"Emmanuel Darmon sur RadioRCJ",                   imp:2028, likes:59, shares:6,  comments:164, saves:0, taux:11.29 },
+        { date:'23/02', post:"OSE au micro de France Culture",                 imp:1498, likes:44, shares:11, comments:139, saves:1, taux:13.02 },
+        { date:'24/02', post:"Revivez en images le Salon du Livre",            imp:739,  likes:13, shares:2,  comments:43,  saves:0, taux:7.85  },
+      ],
+      total: { imp:17917, likes:423, shares:40, comments:2306, saves:14, taux:15.53 },
+      tops: [{ post:"15 ans Café des Psaumes", pourquoi:"Évènement d'actualité + belles images photographe", action:"Lien avec l'actualité + contenu émotionnel" }],
+    },
+    Mars: {
+      posts: [
+        { date:'02/03', post:"Ligne d'écoute — Guerre en Israël",                 imp:734,  likes:22,  shares:3,  comments:31,  saves:0, taux:7.63  },
+        { date:'08/03', post:"3 femmes du réseau Garel dans l'histoire de l'OSE", imp:1046, likes:38,  shares:9,  comments:284, saves:0, taux:31.64 },
+        { date:'10/03', post:"Annonce Fête des Amis de l'OSE",                    imp:710,  likes:20,  shares:1,  comments:60,  saves:0, taux:11.41 },
+        { date:'17/03', post:"Équipe psychologique — aéroport CDG",               imp:4324, likes:89,  shares:5,  comments:344, saves:3, taux:10.20 },
+        { date:'20/03', post:"Les professionnels de l'OSE sur ASH MAG",           imp:674,  likes:23,  shares:3,  comments:25,  saves:0, taux:7.57  },
+        { date:'23/03', post:"Inauguration photo Michel Kirsh",                   imp:611,  likes:13,  shares:0,  comments:38,  saves:0, taux:8.35  },
+        { date:'25/03', post:"L'OSE à Athènes — Sommet ECJC",                    imp:1429, likes:49,  shares:1,  comments:175, saves:1, taux:15.82 },
+        { date:'26/03', post:"Lancement POSé",                                    imp:1425, likes:51,  shares:16, comments:62,  saves:2, taux:9.19  },
+        { date:'26/03', post:"Cellule d'écoute d'urgence",                        imp:2388, likes:110, shares:16, comments:212, saves:1, taux:14.20 },
+        { date:'27/03', post:"Podcast histoire de l'OSE",                         imp:1135, likes:42,  shares:4,  comments:63,  saves:0, taux:9.60  },
+        { date:'31/03', post:"Hag Pessa'h Samea'h",                               imp:935,  likes:43,  shares:3,  comments:23,  saves:0, taux:7.38  },
+      ],
+      total: { imp:15411, likes:500, shares:61, comments:1317, saves:7, taux:12.23 },
+      tops: [{ post:"3 femmes du réseau Garel dans l'histoire de l'OSE", pourquoi:"Post histoire en lien avec le 8 mars, joli visuel", action:"Lien avec l'actualité + témoignage/récit + carrousel + timing" }],
+    },
+    Avril: {
+      posts: [
+        { date:'09/04', post:"Guide de déclaration fiscale",  imp:225,  likes:8,   shares:0,  comments:12,  saves:0, taux:8.89  },
+        { date:'10/04', post:"Témoignage David Perlmutter",   imp:3692, likes:109, shares:15, comments:281, saves:7, taux:11.16 },
+      ],
+      total: { imp:3917, likes:117, shares:15, comments:293, saves:7, taux:11.03 },
+      tops: [{ post:"Témoignage David Perlmutter", pourquoi:"Montage sur Buchenwald + belles images + accroche forte", action:"Lien avec l'actualité + témoignage/récit + timing + contenu émotionnel" }],
+    },
+  },
+  facebook: {
+    label: 'Facebook',
+    cols: ['Vues','Reach','Likes','Commentaires','Partages','Engagement'],
+    keys: ['vues','reach','likes','comments','shares','taux'],
+    mainMetric: 'vues', mainLabel: 'Vues',
+    Janvier: {
+      posts: [
+        { date:'11/01', post:"Dans les livres — Save the date",                   vues:1847, reach:719,  likes:10, comments:2, shares:7,  taux:2.64  },
+        { date:'15/01', post:"Belle année 2026",                                   vues:937,  reach:515,  likes:29, comments:8, shares:4,  taux:7.96  },
+        { date:'16/01', post:"Rencontre littéraire — Sylvie Adler x Katy Hazan",  vues:1076, reach:685,  likes:5,  comments:2, shares:3,  taux:1.46  },
+        { date:'19/01', post:"Radio Shalom — Katy Hazan & Éric Ghozlan",          vues:1156, reach:365,  likes:17, comments:0, shares:0,  taux:4.66  },
+        { date:'22/01', post:"Rencontre Maire Paris Centre",                       vues:958,  reach:316,  likes:31, comments:0, shares:0,  taux:9.81  },
+        { date:'22/01', post:"Dans les livres — 4ème édition Salon du livre",      vues:2269, reach:513,  likes:44, comments:4, shares:13, taux:11.89 },
+        { date:'27/01', post:"Journée mémoire Holocauste",                         vues:2850, reach:681,  likes:6,  comments:0, shares:5,  taux:1.62  },
+      ],
+      total: { vues:11093, reach:3794, likes:142, comments:16, shares:32, taux:5.01 },
+      tops: [
+        { post:"Dans les livres — 4ème édition Salon du livre", pourquoi:"Lien avec un event qui attire un gros public", action:"Lien avec l'actualité + timing de publication" },
+        { post:"Rencontre Maire Paris Centre", pourquoi:"Incarnation, visages, sujet sensible", action:"Contenu incarné + sujet concret/terrain + mise en avant des équipes" },
+        { post:"Belle année 2026", pourquoi:"Post récurrent qu'on a envie de liker", action:"Actualité" },
+      ],
+    },
+    Février: {
+      posts: [
+        { date:'03/02', post:"Dans les livres — Changement d'adresse (1)",         vues:1092,  reach:542,  likes:6,  comments:0, shares:8,  taux:2.58  },
+        { date:'03/02', post:"Dans les livres — Changement d'adresse (2)",         vues:1666,  reach:317,  likes:24, comments:0, shares:9,  taux:10.41 },
+        { date:'04/02', post:"Dans les livres — Au programme",                      vues:10300, reach:2685, likes:41, comments:5, shares:53, taux:3.69  },
+        { date:'05/02', post:"Dominique Versini x Éric Ghozlan",                   vues:2328,  reach:1452, likes:30, comments:0, shares:5,  taux:2.41  },
+        { date:'06/02', post:"Dans les livres — remise des prix",                  vues:1137,  reach:492,  likes:3,  comments:0, shares:12, taux:3.05  },
+        { date:'09/02', post:"Décès Eli Elalouf",                                  vues:3705,  reach:1641, likes:56, comments:2, shares:11, taux:4.20  },
+        { date:'11/02', post:"Les auteurs de la Grande Librairie — Salon",         vues:1150,  reach:631,  likes:10, comments:0, shares:6,  taux:2.54  },
+        { date:'11/02', post:"Dans les livres — rencontre Ginette Kolinka",        vues:2443,  reach:974,  likes:60, comments:4, shares:7,  taux:7.29  },
+        { date:'18/02', post:"+ de 1 500 au 15 du Café des Psaumes",              vues:6264,  reach:3455, likes:91, comments:5, shares:10, taux:3.07  },
+        { date:'19/02', post:"Emmanuel Darmon sur RadioRCJ",                       vues:984,   reach:668,  likes:19, comments:0, shares:2,  taux:3.14  },
+        { date:'23/02', post:"OSE au micro de France Culture",                     vues:1461,  reach:653,  likes:32, comments:0, shares:7,  taux:5.97  },
+        { date:'24/02', post:"Revivez en images le Salon du Livre",                vues:2352,  reach:953,  likes:53, comments:5, shares:7,  taux:6.82  },
+      ],
+      total: { vues:34882, reach:14463, likes:425, comments:21, shares:137, taux:4.03 },
+      tops: [
+        { post:"Dans les livres — Changement d'adresse", pourquoi:"Lien avec un event qui attire un gros public", action:"Lien avec l'actualité + timing de publication" },
+        { post:"Dans les livres — rencontre Ginette Kolinka", pourquoi:"Ginette Kolinka, personnage très attrayant", action:"Personnage attrayant / notoriété" },
+        { post:"Revivez en images le Salon du Livre", pourquoi:"Vidéo d'une journée collective et festive avec têtes d'affiche", action:"Contenu incarné + format vidéo + prise de parole externe" },
+      ],
+    },
+    Mars: {
+      posts: [
+        { date:'04/03', post:"Ligne d'écoute — Guerre en Israël",              vues:1803, reach:928,  likes:20, comments:0,  shares:8,  taux:3.02 },
+        { date:'06/03', post:"Arié Flack sur I24 news",                        vues:1366, reach:522,  likes:21, comments:10, shares:3,  taux:6.51 },
+        { date:'06/03', post:"Conférence Thomas Romer",                        vues:241,  reach:137,  likes:2,  comments:0,  shares:0,  taux:1.46 },
+        { date:'08/03', post:"3 femmes du réseau Garel dans l'histoire de l'OSE",vues:3355,reach:959, likes:43, comments:4,  shares:16, taux:6.57 },
+        { date:'10/03', post:"Annonce Fête des Amis de l'OSE",                 vues:4259, reach:596,  likes:32, comments:0,  shares:25, taux:9.56 },
+        { date:'12/03', post:"Appel à don médiation animale",                  vues:985,  reach:870,  likes:14, comments:0,  shares:0,  taux:1.61 },
+        { date:'17/03', post:"Équipe psychologique — aéroport CDG",            vues:2785, reach:1345, likes:57, comments:5,  shares:3,  taux:4.83 },
+        { date:'20/03', post:"Rencontre Arié Flack x Ariel Goldmann (1)",      vues:1605, reach:778,  likes:11, comments:0,  shares:2,  taux:1.67 },
+        { date:'20/03', post:"Rencontre Arié Flack x Ariel Goldmann (2)",      vues:4568, reach:2006, likes:91, comments:3,  shares:4,  taux:4.89 },
+        { date:'23/03', post:"Inauguration photo Michel Kirsh",                vues:1622, reach:714,  likes:19, comments:0,  shares:1,  taux:2.80 },
+        { date:'25/03', post:"L'OSE à Athènes — Sommet ECJC",                 vues:1735, reach:589,  likes:54, comments:0,  shares:4,  taux:9.85 },
+        { date:'26/03', post:"Lancement POSé",                                 vues:506,  reach:334,  likes:5,  comments:0,  shares:2,  taux:2.10 },
+        { date:'26/03', post:"Cellule d'écoute d'urgence",                     vues:572,  reach:453,  likes:9,  comments:0,  shares:0,  taux:1.99 },
+        { date:'31/03', post:"Hag Pessa'h Samea'h",                            vues:1605, reach:724,  likes:55, comments:1,  shares:6,  taux:8.56 },
+      ],
+      total: { vues:27007, reach:10955, likes:433, comments:23, shares:74, taux:4.84 },
+      tops: [
+        { post:"L'OSE à Athènes — Sommet ECJC", pourquoi:"Tamia tient un discours en lien avec le travail de l'OSE", action:"Format vidéo + contenu incarné + storytelling" },
+        { post:"Annonce Fête des Amis de l'OSE", pourquoi:"Mise en avant d'un moment festif qui attire du public", action:"Visuel simple/lisible" },
+        { post:"Hag Pessa'h Samea'h", pourquoi:"Post sur la campagne posté avant Pessah", action:"Appel à l'action + timing de publication" },
+      ],
+    },
+    Avril: {
+      posts: [
+        { date:'01/04', post:"Retour sur la fête des amis de l'OSE", vues:2065,  reach:903,  likes:42,   comments:0,  shares:6,   taux:5.32   },
+        { date:'10/04', post:"Guide de déclaration fiscale",          vues:364,   reach:222,  likes:1,    comments:0,  shares:1,   taux:0.90   },
+        { date:'10/04', post:"Témoignage David Perlmutter",           vues:70184, reach:1326, likes:3179, comments:74, shares:287, taux:266.97 },
+      ],
+      total: { vues:72613, reach:2451, likes:3222, comments:74, shares:294, taux:146.47 },
+      tops: [{ post:"Témoignage David Perlmutter", pourquoi:"Montage sur Buchenwald + belles images + accroche forte", action:"Lien avec l'actualité + témoignage/récit + timing + contenu émotionnel" }],
+    },
+  },
+  instagram: {
+    label: 'Instagram',
+    cols: ['Vues','Likes','Partages','Commentaires','Enregistr.','Followers +','Engagement'],
+    keys: ['vues','likes','shares','comments','saves','followers','taux'],
+    mainMetric: 'vues', mainLabel: 'Vues',
+    Janvier: {
+      posts: [
+        { date:'11/01', post:"Dans les livres — Save the date",               vues:666,   likes:16,  shares:1,  comments:3,  saves:1,    followers:2,    taux:3.15 },
+        { date:'15/01', post:"EEIF x OSE",                                     vues:10996, likes:120, shares:8,  comments:6,  saves:null, followers:null, taux:1.22 },
+        { date:'15/01', post:"Belle année 2026",                               vues:510,   likes:12,  shares:0,  comments:0,  saves:0,    followers:0,    taux:2.35 },
+        { date:'19/01', post:"Radio Shalom — Katy Hazan & Éric Ghozlan",      vues:537,   likes:9,   shares:0,  comments:0,  saves:0,    followers:0,    taux:1.68 },
+        { date:'22/01', post:"Rencontre Maire Paris Centre",                   vues:1356,  likes:27,  shares:2,  comments:3,  saves:2,    followers:2,    taux:2.51 },
+        { date:'22/01', post:"Dans les livres — 4ème édition Salon du livre",  vues:823,   likes:19,  shares:5,  comments:0,  saves:1,    followers:0,    taux:3.04 },
+        { date:'27/01', post:"hinenicollective x OSE",                         vues:2873,  likes:67,  shares:8,  comments:0,  saves:null, followers:null, taux:2.61 },
+        { date:'27/01', post:"Journée mémoire Holocauste",                     vues:842,   likes:17,  shares:2,  comments:0,  saves:2,    followers:1,    taux:2.49 },
+      ],
+      total: { vues:18603, likes:287, shares:26, comments:12, saves:6, followers:5, taux:1.78 },
+      tops: [
+        { post:"Dans les livres — Save the date", pourquoi:"Lien avec un event qui attire un gros public", action:"Lien avec l'actualité + timing de publication" },
+        { post:"Dans les livres — 4ème édition Salon du livre", pourquoi:"Lien avec un event qui attire un gros public", action:"Lien avec l'actualité + timing de publication" },
+        { post:"hinenicollective x OSE", pourquoi:"Crosspost avec Hineni + lien avec l'actu", action:"Partenariat / prise de parole externe — public Hineni à explorer" },
+      ],
+    },
+    Février: {
+      posts: [
+        { date:'03/02', post:"Dans les livres — Changement d'adresse",        vues:1098, likes:17, shares:8,  comments:0, saves:1, followers:1, taux:2.37 },
+        { date:'04/02', post:"Dans les livres — Au programme",                 vues:3994, likes:22, shares:25, comments:1, saves:2, followers:0, taux:1.25 },
+        { date:'05/02', post:"Dominique Versini x Éric Ghozlan",              vues:852,  likes:29, shares:0,  comments:0, saves:0, followers:0, taux:3.40 },
+        { date:'06/02', post:"Dans les livres — remise des prix",             vues:810,  likes:16, shares:4,  comments:1, saves:0, followers:0, taux:2.59 },
+        { date:'09/02', post:"Décès Eli Elalouf",                             vues:1083, likes:24, shares:8,  comments:0, saves:1, followers:0, taux:3.05 },
+        { date:'11/02', post:"Dans les livres — rencontre Ginette Kolinka",   vues:792,  likes:25, shares:2,  comments:1, saves:2, followers:0, taux:3.79 },
+        { date:'18/02', post:"15 ans Café des Psaumes",                       vues:561,  likes:21, shares:3,  comments:0, saves:1, followers:0, taux:4.46 },
+        { date:'19/02', post:"Emmanuel Darmon sur RadioRCJ",                  vues:705,  likes:22, shares:2,  comments:2, saves:2, followers:4, taux:3.97 },
+        { date:'23/02', post:"OSE au micro de France Culture",                vues:447,  likes:9,  shares:0,  comments:0, saves:1, followers:0, taux:2.24 },
+        { date:'24/02', post:"Revivez en images le Salon du Livre",           vues:1188, likes:21, shares:4,  comments:2, saves:0, followers:1, taux:2.27 },
+      ],
+      total: { vues:11530, likes:206, shares:56, comments:7, saves:10, followers:6, taux:2.42 },
+      tops: [
+        { post:"15 ans Café des Psaumes", pourquoi:"Évènement d'actualité + belles images photographe", action:"Lien avec l'actualité + contenu émotionnel" },
+        { post:"Emmanuel Darmon sur RadioRCJ", pourquoi:"Emmanuel incarne les services de l'ESAT auprès de la presse", action:"Mise en avant des équipes + contenu incarné + presse" },
+        { post:"Dans les livres — rencontre Ginette Kolinka", pourquoi:"Ginette Kolinka, personnage très attrayant", action:"Personnage attrayant / notoriété" },
+      ],
+    },
+    Mars: {
+      posts: [
+        { date:'04/03', post:"Ligne d'écoute — Guerre en Israël",                 vues:318,  likes:10, shares:3,  comments:0, saves:0, followers:1,    taux:4.09 },
+        { date:'06/03', post:"Arié Flack sur I24 news",                           vues:622,  likes:10, shares:1,  comments:0, saves:0, followers:0,    taux:1.77 },
+        { date:'08/03', post:"3 femmes du réseau Garel dans l'histoire de l'OSE", vues:1554, likes:20, shares:8,  comments:0, saves:1, followers:1,    taux:1.87 },
+        { date:'10/03', post:"Annonce Fête des Amis de l'OSE",                    vues:2886, likes:22, shares:17, comments:0, saves:2, followers:0,    taux:1.42 },
+        { date:'12/03', post:"Appel à don médiation animale",                     vues:1607, likes:25, shares:2,  comments:0, saves:0, followers:0,    taux:1.68 },
+        { date:'17/03', post:"Équipe psychologique — aéroport CDG",               vues:669,  likes:23, shares:0,  comments:0, saves:1, followers:0,    taux:3.59 },
+        { date:'20/03', post:"Les professionnels de l'OSE sur ASH MAG",           vues:517,  likes:8,  shares:0,  comments:0, saves:1, followers:0,    taux:1.74 },
+        { date:'20/03', post:"Rencontre Arié Flack x Ariel Goldmann",             vues:1595, likes:34, shares:3,  comments:0, saves:0, followers:2,    taux:2.32 },
+        { date:'23/03', post:"Inauguration photo Michel Kirsh",                   vues:907,  likes:12, shares:1,  comments:0, saves:0, followers:0,    taux:1.43 },
+        { date:'25/03', post:"L'OSE à Athènes — Sommet ECJC",                    vues:1099, likes:41, shares:1,  comments:0, saves:0, followers:0,    taux:3.82 },
+        { date:'26/03', post:"Lancement POSé",                                    vues:594,  likes:10, shares:4,  comments:0, saves:0, followers:null, taux:2.36 },
+        { date:'26/03', post:"Cellule d'écoute d'urgence",                        vues:895,  likes:18, shares:6,  comments:1, saves:0, followers:0,    taux:2.79 },
+        { date:'27/03', post:"Podcast histoire de l'OSE",                         vues:308,  likes:8,  shares:0,  comments:0, saves:0, followers:null, taux:2.60 },
+        { date:'31/03', post:"Hag Pessa'h Samea'h",                               vues:653,  likes:29, shares:2,  comments:0, saves:1, followers:1,    taux:4.90 },
+      ],
+      total: { vues:14224, likes:270, shares:48, comments:1, saves:6, followers:5, taux:2.28 },
+      tops: [
+        { post:"Hag Pessa'h Samea'h", pourquoi:"Actualité Pessah", action:"Lien avec l'actualité + timing de publication" },
+        { post:"Ligne d'écoute — Guerre en Israël", pourquoi:"Actualité Israël, OSE en soutien", action:"Lien avec l'actualité + timing de publication" },
+        { post:"L'OSE à Athènes — Sommet ECJC", pourquoi:"Tamia tient un discours en lien avec le travail de l'OSE", action:"Format vidéo + contenu incarné + storytelling" },
+      ],
+    },
+    Avril: {
+      posts: [
+        { date:'01/04', post:"Retour sur la fête des amis de l'OSE",  vues:1366,   likes:28,   shares:2,   comments:0,   saves:0,   followers:0,    taux:2.20 },
+        { date:'03/04', post:"Podcast Nawel Oumer",                    vues:534,    likes:15,   shares:3,   comments:1,   saves:0,   followers:null, taux:3.56 },
+        { date:'10/04', post:"The last Ones x OSE",                    vues:30651,  likes:803,  shares:32,  comments:30,  saves:0,   followers:null, taux:2.82 },
+        { date:'10/04', post:"Guide de déclaration fiscale",           vues:693,    likes:5,    shares:0,   comments:0,   saves:2,   followers:0,    taux:1.01 },
+        { date:'10/04', post:"Podcast Gabriel Douieb",                 vues:535,    likes:9,    shares:4,   comments:0,   saves:0,   followers:null, taux:2.43 },
+        { date:'10/04', post:"Témoignage David Perlmutter",            vues:63523,  likes:2870, shares:266, comments:68,  saves:258, followers:250,  taux:5.45 },
+        { date:'11/04', post:"The last Ones x OSE — Buchenwald",      vues:133729, likes:6776, shares:328, comments:202, saves:0,   followers:null, taux:5.46 },
+      ],
+      total: { vues:231031, likes:10506, shares:635, comments:301, saves:260, followers:250, taux:5.07 },
+      tops: [
+        { post:"The last Ones x OSE — Buchenwald", pourquoi:"Crosspost avec Les Derniers + actu Buchenwald", action:"Lien avec l'actualité + crosspost + contenu émotionnel + timing" },
+        { post:"Témoignage David Perlmutter", pourquoi:"Montage sur Buchenwald + belles images + accroche forte", action:"Lien avec l'actualité + témoignage/récit + timing + contenu émotionnel" },
+        { post:"Podcast Nawel Oumer", pourquoi:"Sujet potentiellement intéressant pour notre public", action:"À tester : format podcast sur Instagram" },
+      ],
+    },
+  },
+};
+
+// ── RS platform control ───────────────────────────────────────
+function setRSPlatform(platform) {
+  currentRSPlatform = platform;
+  document.querySelectorAll('.rs-platform-pill').forEach(b =>
+    b.classList.toggle('active', b.dataset.rs === platform));
+  renderRS(currentMois);
+}
+
+// ── RS render ─────────────────────────────────────────────────
+function renderRS(mois) {
+  const container = document.getElementById('rs-container');
+  if (!container) return;
+  const pData = RS_DATA[currentRSPlatform];
+  const mData = pData?.[mois];
+
+  if (!mData) {
+    container.innerHTML = `<div class="pending-notice"><span class="pending-dot"></span>Données ${pData?.label || ''} non disponibles pour ${mois} — à compléter.</div>`;
+    return;
+  }
+
+  const cols = pData.cols, keys = pData.keys;
+  const { posts, total, tops } = mData;
+  const fmt = n => (n != null) ? new Intl.NumberFormat('fr-FR').format(n) : '—';
+  const fmtPct = n => (n != null) ? n.toFixed(2).replace('.',',') + ' %' : '—';
+
+  // Summary metrics
+  const summaryCards = [
+    { label: 'Publications',        value: posts.length },
+    { label: pData.mainLabel,       value: fmt(total[pData.mainMetric]) },
+    { label: 'Reach / portée',      value: total.reach != null ? fmt(total.reach) : '—' },
+    { label: "Taux d'engagement",   value: fmtPct(total.taux) },
+  ].map(c => `<div class="metric"><div class="metric-label">${c.label}</div><div class="metric-value" style="font-size:16px">${c.value}</div></div>`).join('');
+
+  // Posts table
+  const headerCells = cols.map(c => `<th>${c}</th>`).join('');
+  const bodyRows = posts.map(p => {
+    const cells = keys.map(k => {
+      if (k === 'taux') return `<td>${fmtPct(p[k])}</td>`;
+      return `<td>${fmt(p[k])}</td>`;
+    }).join('');
+    return `<tr>
+      <td style="text-align:left;font-family:var(--font);color:var(--text-hint);white-space:nowrap">${p.date}</td>
+      <td style="text-align:left;font-family:var(--font);color:var(--text-muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.post}</td>
+      ${cells}</tr>`;
+  }).join('');
+  const totalCells = keys.map(k => {
+    if (k === 'taux') return `<td>${fmtPct(total[k])}</td>`;
+    return `<td>${fmt(total[k])}</td>`;
+  }).join('');
+
+  // Top cards
+  const topCards = tops.map((t, i) => `
+    <div class="rs-top-card">
+      <div class="rs-top-rank">${tops.length > 1 ? (i+1) : '★'}</div>
+      <div class="rs-top-content">
+        <div class="rs-top-post">${t.post}</div>
+        <div class="rs-top-why"><span>Pourquoi</span>${t.pourquoi}</div>
+        <div class="rs-top-action"><span>À tester</span>${t.action}</div>
+      </div>
+    </div>`).join('');
+
+  container.innerHTML = `
+    <div class="metrics-grid" style="margin-bottom:20px">${summaryCards}</div>
+    <div class="section-title">Posts — ${mois} 2026</div>
+    <div style="overflow-x:auto">
+      <table class="rs-table">
+        <thead><tr><th style="text-align:left">Date</th><th style="text-align:left">Post</th>${headerCells}</tr></thead>
+        <tbody>
+          ${bodyRows}
+          <tr class="rs-total-row">
+            <td style="text-align:left;font-family:var(--font)">Total</td>
+            <td style="text-align:left;font-family:var(--font)">${mois.toLowerCase()}</td>
+            ${totalCells}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section-title" style="margin-top:24px">Top du mois</div>
+    <div class="rs-tops">${topCards}</div>`;
+}
+
+// ── Tab state ─────────────────────────────────────────────────
+let currentTab = 'dons';
+
+function setTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-pill').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.view-section').forEach(v => v.classList.toggle('active', v.id === `view-${tab}`));
+  render(currentMois);
+}
+
+// ── RFM definitions (tooltip content) ────────────────────────
+const RFM_DEFS = {
+  Champion:     { recence: '0 – 24 mois', frequence: '2 – 7 dons', montant: '≥ 1 500 € cumulés ou ≥ 500 €/an', desc: 'Grands donateurs fidélisés ayant renouvelé au moins une fois leur don.' },
+  Fid_Loyaux:   { recence: '0 – 24 mois', frequence: '3 – 7 dons', montant: '0 – 1 500 € (max 500 €/an)', desc: 'Donateurs fréquents et sûrs.' },
+  Potentiels:   { recence: '0 – 36 mois', frequence: '0 – 2 dons', montant: '600 € – 10 000 €+ · don moyen ≥ 300 €', desc: 'Potentiels grands donateurs.' },
+  Nouveaux:     { recence: '0 – 6 mois',  frequence: '1 don',       montant: 'Tout montant', desc: 'Donateurs de moins de 6 mois ayant effectué un premier don.' },
+  Occasionnel:  { recence: '0 – 24 mois', frequence: '0 – 2 dons', montant: '0 – 1 500 €', desc: 'Petits donateurs récurrents imprévisibles.' },
+  Revenus:      { recence: '0 – 6 mois',  frequence: '1 don',       montant: 'Tout montant', desc: 'Donateurs récents (< 6 mois) ayant déjà donné il y a plus de 3 ans.' },
+  Endormis:     { recence: '25 – 36 mois',frequence: '0 – 7 dons', montant: '0 – 600 €', desc: 'Petits-moyens donateurs avec un risque de fuite croissant.' },
+  Risque_fuite: { recence: '25 – 36+ mois',frequence: '0 – 7 dons',montant: '150 € – 10 000 €+', desc: 'Grands donateurs ou fidèles dont la récence devient alarmante.' },
+  Perdu:        { recence: '36+ mois',     frequence: '0 – 7 dons', montant: '0 – 10 000 €+', desc: 'Tout type de donateurs sans activité depuis plus de 36 mois.' },
+};
+
+// ── RFM render ────────────────────────────────────────────────
+function renderRFM(mois) {
+  const stitle = document.getElementById('s-rfm');
+  stitle.textContent = `Segmentation RFM — ${mois} 2026`;
+
+  const container = document.getElementById('rfm-container');
+  const data = RFM_DATA[mois];
+
+  if (!data) {
+    container.innerHTML = `<div class="pending-notice"><span class="pending-dot"></span>Données RFM non disponibles pour ${mois} — à compléter.</div>`;
+    return;
+  }
+
+  // Previous month (always the one just before in the list)
+  const prevIdx  = MOIS_ORDER.indexOf(mois) - 1;
+  const prevMois = prevIdx >= 0 ? MOIS_ORDER[prevIdx] : null;
+  const prevData = prevMois ? RFM_DATA[prevMois] : null;
+
+  // Segment cards
+  const cards = RFM_META.map(m => {
+    const count = data.segments[m.key] || 0;
+    const def   = RFM_DEFS[m.key] || {};
+
+    // Tooltip HTML
+    const tooltip = `<span class="rfm-info" tabindex="0">i
+      <span class="rfm-tooltip">
+        <div class="rfm-tooltip-title">${m.label}</div>
+        <div class="rfm-tooltip-row"><span>Récence</span><span>${def.recence || '—'}</span></div>
+        <div class="rfm-tooltip-row"><span>Fréquence</span><span>${def.frequence || '—'}</span></div>
+        <div class="rfm-tooltip-row"><span>Montant</span><span>${def.montant || '—'}</span></div>
+        <div style="margin-top:6px;font-size:10px;color:#D0CEC8">${def.desc || ''}</div>
+      </span>
+    </span>`;
+
+    // Evolution vs previous month
+    let evoHtml = `<span class="rfm-card-no-prev">premier mois disponible</span>`;
+    if (prevData && prevData.segments[m.key] != null) {
+      const prev  = prevData.segments[m.key];
+      const diff  = count - prev;
+      const pct   = ((diff / prev) * 100).toFixed(1);
+      const cls   = diff >= 0 ? 'up' : 'down';
+      const sign  = diff >= 0 ? '+' : '−';
+      const prevLabel = prevMois.toLowerCase();
+      evoHtml = `<span class="rfm-card-diff ${cls}">${sign}${Math.abs(diff)} vs ${prevLabel}</span>
+                 <span class="rfm-card-pct ${cls}">(${sign}${Math.abs(pct)} %)</span>`;
+    }
+
+    return `<div class="rfm-card">
+      <div class="rfm-card-header">
+        <div class="rfm-card-name">${m.label}</div>
+        ${tooltip}
+      </div>
+      <div class="rfm-card-count">${new Intl.NumberFormat('fr-FR').format(count)}</div>
+      <div class="rfm-card-evo-row">${evoHtml}</div>
+    </div>`;
+  }).join('');
+
+  // Prospect card
+  let prospectHtml = '';
+  if (data.prospect !== null) {
+    const prevProspect = prevData?.prospect ?? null;
+    let prospectEvo = '';
+    if (prevProspect != null) {
+      const diff  = data.prospect - prevProspect;
+      const pct   = ((diff / prevProspect) * 100).toFixed(1);
+      const cls   = diff >= 0 ? 'up' : 'down';
+      const sign  = diff >= 0 ? '+' : '−';
+      prospectEvo = `<span class="rfm-card-diff ${cls}" style="font-size:12px">${sign}${Math.abs(diff)}</span>
+                     <span class="rfm-card-pct ${cls}">(${sign}${Math.abs(pct)} %)</span>`;
+    }
+    prospectHtml = `<div class="rfm-prospect-card">
+      <div>
+        <div class="rfm-prospect-label">Base Prospects</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+          <div class="rfm-prospect-count">${new Intl.NumberFormat('fr-FR').format(data.prospect)}</div>
+          ${prospectEvo}
+        </div>
+      </div>
+      <span class="rfm-prospect-note">contacts non-donateurs · hors base donateurs</span>
+    </div>`;
+  }
+
+  container.innerHTML = `
+    <div class="rfm-header-row">
+      <span style="font-size:11px;color:var(--text-muted);font-family:var(--mono)">${data.date}</span>
+      <span class="rfm-base-badge">base de donateurs : ${new Intl.NumberFormat('fr-FR').format(data.total)}</span>
+    </div>
+    <div class="rfm-grid">${cards}</div>
+    ${prospectHtml}
+  `;
+}
+
+
+
+// ── State ─────────────────────────────────────────────────────
+let currentMois   = "Avril";
+let currentFilter = "total";
+let refYear       = 2025;
+let tempoRefYear  = 2025;
+
+// ── Helpers ───────────────────────────────────────────────────
+function fmtEur(n) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' €';
+}
+function fmtEurShort(n) {
+  if (!n) return '—';
+  return new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n) + ' €';
+}
+function fmtN(n) {
+  if (n === null || n === undefined) return '—';
+  return new Intl.NumberFormat('fr-FR').format(n);
+}
+function moy(raw, dons) {
+  if (!raw || !dons) return null;
+  return raw / dons;
+}
+function delta(n, n1) {
+  if (n === null || n1 === null || n1 === 0) return { str: '—', up: null };
+  const pct = (n - n1) / n1 * 100;
+  const up  = pct >= 0;
+  return { str: (up ? '+ ' : '− ') + Math.abs(pct).toFixed(1) + ' %', up };
+}
+function deltaHtml(d) {
+  if (d.up === null) return `<span style="color:var(--text-hint)">${d.str}</span>`;
+  return `<span class="${d.up ? 'delta-up' : 'delta-down'}">${d.str}</span>`;
+}
+function pctOf(val, total) {
+  if (!val || !total) return null;
+  return (val / total * 100).toFixed(2);
+}
+
+// ── Historical data helpers ────────────────────────────────────
+function getHistMonth(mois, year) {
+  return HIST[year]?.[mois] || { ose: { raw: 0, dons: 0 }, fond: { raw: 0, dons: 0 } };
+}
+
+function getHistYTD(mois, year) {
+  const upTo = ALL_MONTHS.slice(0, ALL_MONTHS.indexOf(mois) + 1);
+  let oseRaw = 0, oseDons = 0, fondRaw = 0, fondDons = 0;
+  for (const m of upTo) {
+    const h = getHistMonth(m, year);
+    oseRaw  += h.ose.raw   || 0;  oseDons  += h.ose.dons   || 0;
+    fondRaw += h.fond.raw  || 0;  fondDons += h.fond.dons  || 0;
+  }
+  return { ose: { raw: oseRaw, dons: oseDons }, fond: { raw: fondRaw, dons: fondDons } };
+}
+
+function applyFilter(pair) {
+  if (currentFilter === 'asso') return { raw: pair.ose.raw, dons: pair.ose.dons };
+  if (currentFilter === 'fond') return { raw: pair.fond.raw, dons: pair.fond.dons };
+  const raw  = (pair.ose.raw  || 0) + (pair.fond.raw  || 0);
+  const dons = (pair.ose.dons || 0) + (pair.fond.dons || 0);
+  return { raw: raw || null, dons: dons || null };
+}
+
+function getFiltered(mois) {
+  const d        = MOIS_DATA[mois];
+  const histM    = getHistMonth(mois, refYear);
+  const histYTD  = getHistYTD(mois, refYear);
+  const histTempoYTD = getHistYTD(mois, tempoRefYear);
+  return {
+    month:    applyFilter({ ose: d.ose,     fond: d.fond     }),
+    month_n1: applyFilter(histM),
+    ytd:      applyFilter({ ose: d.ytd_ose, fond: d.ytd_fond }),
+    ytd_n1:   applyFilter(histYTD),
+    tempoYTD_n1: { raw: (histTempoYTD.ose.raw || 0) + (histTempoYTD.fond.raw || 0) },
+    tempoYTD_n:  { raw: (d.ytd_ose.raw !== null && d.ytd_fond.raw !== null)
+                        ? (d.ytd_ose.raw || 0) + (d.ytd_fond.raw || 0) : null },
+  };
+}
+
+// ── Controls ─────────────────────────────────────────────────
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.sidebar-pill').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  const labels = { total: 'consolidé', asso: 'Association seule', fond: 'Fondation seule' };
+  document.getElementById('sidebar-note').textContent = labels[f];
+  render(currentMois);
+}
+
+function setTempoRef(y) {
+  tempoRefYear = parseInt(y);
+  document.querySelectorAll('.tempo-year-pill').forEach(b => b.classList.toggle('active', parseInt(b.dataset.tempoyear) === tempoRefYear));
+  render(currentMois);
+}
+
+function setRefYear(y) {
+  refYear = parseInt(y);
+  render(currentMois);
+}
+
+// ── Build month pills ─────────────────────────────────────────
+const pillsEl = document.getElementById('pills');
+MOIS_ORDER.forEach(m => {
+  const btn = document.createElement('button');
+  btn.className    = 'month-pill' + (MOIS_DATA[m].pending ? ' pending' : '');
+  btn.textContent  = MOIS_ABBR[m] || m;
+  btn.dataset.mois = m;
+  btn.addEventListener('click', () => { currentMois = m; render(m); });
+  pillsEl.appendChild(btn);
+});
+
+// ── Main render ───────────────────────────────────────────────
+function render(mois) {
+  const d   = MOIS_DATA[mois];
+  const fv  = getFiltered(mois);
+  const isPending = !!d.pending;
+
+  document.querySelectorAll('.month-pill').forEach(b => b.classList.toggle('active', b.dataset.mois === mois));
+
+  const tabTitles = { dons: 'Rapport des dons', email: 'Rapport des mails', rs: 'Rapport RS', rfm: 'RFM' };
+  document.getElementById('h-title').textContent = `${tabTitles[currentTab] || 'Rapport des dons'} — ${mois} ${d.annee}`;
+  document.getElementById('h-meta').innerHTML =
+    `Période ${d.periode} ${d.annee}<br>Préparé pour Simon<br>Date 30 ${mois.toLowerCase()} ${d.annee}`;
+
+  const badgeLabels = { total: 'Association + Fondation', asso: 'Association OSE uniquement', fond: 'Fondation OSE-MES uniquement' };
+  document.getElementById('zone-badge-text').textContent = badgeLabels[currentFilter];
+
+  document.getElementById('s-resultats').textContent = `Résultats du mois — ${mois} ${d.annee}`;
+  document.getElementById('s-comp').textContent      = `${mois} ${d.annee} vs ${mois} ${refYear}`;
+  document.getElementById('s-ytd').textContent       = `Cumul ${d.ytd_label} ${d.annee} vs ${d.ytd_label} ${refYear}`;
+  document.getElementById('s-email').textContent     = `Campagnes email — ${mois} ${d.annee}`;
+  document.getElementById('s-tempo').textContent     = `Temps de passage — projection annuelle ${d.annee}`;
+
+  renderRFM(mois);
+  renderRS(mois);
+
+  const grid = document.getElementById('entity-grid');
+  const cardOse  = document.getElementById('card-ose');
+  const cardFond = document.getElementById('card-fond');
+  if (currentFilter === 'asso') {
+    grid.classList.add('single'); cardOse.style.display = ''; cardFond.style.display = 'none';
+  } else if (currentFilter === 'fond') {
+    grid.classList.add('single'); cardOse.style.display = 'none'; cardFond.style.display = '';
+  } else {
+    grid.classList.remove('single'); cardOse.style.display = ''; cardFond.style.display = '';
+  }
+  document.getElementById('ose-collecte').textContent  = isPending ? '—' : fmtEur(d.ose.raw);
+  document.getElementById('ose-details').textContent   = isPending ? '—' : `${fmtN(d.ose.dons)} dons · moy. ${fmtEur(moy(d.ose.raw, d.ose.dons))}`;
+  document.getElementById('fond-collecte').textContent = isPending ? '—' : fmtEur(d.fond.raw);
+  document.getElementById('fond-details').textContent  = isPending ? '—' : `${fmtN(d.fond.dons)} dons · moy. ${fmtEur(moy(d.fond.raw, d.fond.dons))}`;
+
+  const mRaw  = fv.month.raw;
+  const mDons = fv.month.dons;
+  document.getElementById('m-label-col').textContent  = currentFilter === 'total' ? 'Collecte totale' : 'Collecte';
+  document.getElementById('m-collecte').textContent   = fmtEur(mRaw);
+  document.getElementById('m-dons').textContent       = fmtN(mDons);
+  document.getElementById('m-moyen').textContent      = fmtEur(moy(mRaw, mDons));
+
+  document.getElementById('th-n1-prefix').textContent = mois + ' ';
+  document.getElementById('sel-ref-year').value       = refYear;
+  document.getElementById('th-n').textContent         = `${mois} ${d.annee}`;
+
+  const n1Raw  = fv.month_n1.raw;  const n1Dons = fv.month_n1.dons;
+  document.getElementById('c-col-n1').textContent = fmtEur(n1Raw);
+  document.getElementById('c-col-n').textContent  = fmtEur(mRaw);
+  document.getElementById('c-col-d').innerHTML    = deltaHtml(delta(mRaw, n1Raw));
+  document.getElementById('c-don-n1').textContent = fmtN(n1Dons);
+  document.getElementById('c-don-n').textContent  = fmtN(mDons);
+  document.getElementById('c-don-d').innerHTML    = deltaHtml(delta(mDons, n1Dons));
+  document.getElementById('c-moy-n1').textContent = fmtEur(moy(n1Raw, n1Dons));
+  document.getElementById('c-moy-n').textContent  = fmtEur(moy(mRaw, mDons));
+  document.getElementById('c-moy-d').innerHTML    = deltaHtml(delta(moy(mRaw, mDons), moy(n1Raw, n1Dons)));
+
+  const yRaw   = fv.ytd.raw;    const yDons   = fv.ytd.dons;
+  const y1Raw  = fv.ytd_n1.raw; const y1Dons  = fv.ytd_n1.dons;
+  document.getElementById('th-ytd-n1').textContent = `${d.ytd_label} ${refYear}`;
+  document.getElementById('th-ytd-n').textContent  = `${d.ytd_label} ${d.annee}`;
+  document.getElementById('y-col-n1').textContent  = fmtEur(y1Raw);
+  document.getElementById('y-col-n').textContent   = fmtEur(yRaw);
+  document.getElementById('y-col-d').innerHTML     = deltaHtml(delta(yRaw, y1Raw));
+  document.getElementById('y-don-n1').textContent  = fmtN(y1Dons);
+  document.getElementById('y-don-n').textContent   = fmtN(yDons);
+  document.getElementById('y-don-d').innerHTML     = deltaHtml(delta(yDons, y1Dons));
+
+  const ec = document.getElementById('email-container');
+  if (d.emails_pending || !d.emails.length) {
+    ec.innerHTML = `<div class="pending-notice"><span class="pending-dot"></span>Données email non encore disponibles pour ${mois} — à compléter.</div>`;
+  } else {
+    let rows = d.emails.map(e => `<tr>
+      <td>${e.objet}</td>
+      <td><span class="badge ${BADGE_CLASS[e.type] || ''}">${e.type}</span></td>
+      <td>${e.date}</td><td>${e.dest}</td><td>${e.ouv}</td><td>${e.clics}</td>
+      <td>${e.dons}</td><td>${e.collecte}</td><td>${e.moyen}</td>
+    </tr>`).join('');
+    const t = d.emails_total;
+    rows += `<tr><td>Total ${mois.toLowerCase()}</td><td></td><td></td><td>${t.dest}</td><td>—</td><td>—</td><td>${t.dons}</td><td>${t.collecte}</td><td>${t.moyen}</td></tr>`;
+    ec.innerHTML = `<table class="mail-table">
+      <thead><tr><th>Objet</th><th>Type</th><th>Date</th><th>Dest.</th><th>T. ouv.</th><th>T. clics</th><th>Dons</th><th>Collecte</th><th>Don moy.</th></tr></thead>
+      <tbody>${rows}</tbody></table>`;
+    applyEmailColors();
+  }
+
+  const cumul_n1   = fv.tempoYTD_n1.raw;
+  const cumul_n    = fv.tempoYTD_n.raw;
+  const TEMPO_REF  = TEMPO_REFS[tempoRefYear];
+  const pct_n1     = pctOf(cumul_n1, TEMPO_REF);
+  const pct_n      = pctOf(cumul_n,  TEMPO_REF);
+
+  document.getElementById('tp-label-ref').textContent = `Total annuel ${tempoRefYear} (référence)`;
+  document.getElementById('tp-val-ref').textContent   = fmtEur(TEMPO_REF);
+  document.getElementById('tp-bar-max').textContent   = fmtEurShort(TEMPO_REF);
+
+  document.getElementById('tp-label-n1').textContent = `Cumul ${d.ytd_label} ${tempoRefYear}`;
+  document.getElementById('tp-val-n1').textContent   = fmtEur(cumul_n1);
+  document.getElementById('tp-sub-n1').textContent   = pct_n1 ? `${pct_n1} % du total ${tempoRefYear}` : '—';
+
+  document.getElementById('tp-label-n').textContent  = `Cumul ${d.ytd_label} 2026`;
+  document.getElementById('tp-val-n').textContent    = cumul_n ? fmtEur(cumul_n) : '— (en attente)';
+  document.getElementById('tp-sub-n').textContent    = pct_n ? `${pct_n} % du total ${tempoRefYear}` : '—';
+
+  document.getElementById('bar-ref').style.width   = pct_n1 ? `${Math.min(pct_n1, 100)}%` : '0%';
+  document.getElementById('bar-2026').style.width  = pct_n  ? `${Math.min(pct_n,  100)}%` : '0%';
+  document.getElementById('leg-ref').textContent   = pct_n1 ? `${d.ytd_label} ${tempoRefYear} — ${pct_n1} %` : `${d.ytd_label} ${tempoRefYear}`;
+  document.getElementById('leg-2026').textContent  = pct_n  ? `${d.ytd_label} 2026 — ${pct_n} %`            : `${d.ytd_label} 2026 (en attente)`;
+
+  document.getElementById('tp-proj-rythme').textContent = `(rythme ${tempoRefYear} appliqué)`;
+  if (pct_n1 && cumul_n) {
+    const proj = cumul_n / (parseFloat(pct_n1) / 100);
+    document.getElementById('tp-proj').textContent      = `≈ ${fmtEurShort(Math.round(proj / 1000) * 1000)}`;
+    document.getElementById('tp-proj-note').textContent = `${fmtEur(cumul_n)} ÷ ${pct_n1} % · estimation indicative`;
+  } else {
+    document.getElementById('tp-proj').textContent      = '— (données en attente)';
+    document.getElementById('tp-proj-note').textContent = '';
+  }
+}
+
+function applyEmailColors() {
+  document.querySelectorAll('.mail-table tbody tr').forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length < 9 || cells[0].innerText.toLowerCase().includes('total')) return;
+    const parse = t => parseFloat(t.replace(/\s/g,'').replace(',','.').replace('%','').replace('€',''));
+    const openRate  = parse(cells[4].innerText);
+    const clickRate = parse(cells[5].innerText);
+    const avgRaw    = cells[8].innerText;
+    const avgGift   = avgRaw.includes('—') ? null : parse(avgRaw);
+    [cells[4], cells[5], cells[8]].forEach(c => c.classList.remove('good','bad'));
+    if (!isNaN(openRate))  cells[4].classList.add(openRate  >= 28.59  ? 'good' : 'bad');
+    if (!isNaN(clickRate)) cells[5].classList.add(clickRate >= 10     ? 'good' : 'bad');
+    if (avgGift !== null && !isNaN(avgGift)) cells[8].classList.add(avgGift >= 165.78 ? 'good' : 'bad');
+  });
+}
+
+render('Avril');
+</script>
+</body>
+</html>

@@ -234,6 +234,25 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); font
 .template-badge { font-size: 10px; font-weight: 500; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 20px; font-family: var(--mono); }
 
 @media print { body { background: white; padding: 20px; } }
+
+/* ── Objectif ── */
+.objectif-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+.objectif-row { display: flex; align-items: center; gap: 14px; }
+.objectif-row.total-row { padding-top: 10px; border-top: 1px solid var(--border); }
+.objectif-label { font-size: 11px; color: var(--text-muted); white-space: nowrap; min-width: 150px; }
+.objectif-label strong { font-weight: 500; color: var(--text); }
+.objectif-bar-wrap { flex: 1; }
+.objectif-bar-track { height: 8px; background: var(--surface2); border-radius: 99px; overflow: hidden; position: relative; }
+.objectif-row.total-row .objectif-bar-track { height: 10px; }
+.objectif-bar-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 99px; transition: width 0.5s ease; }
+.objectif-bar-fill.fill-ose  { background: var(--teal); }
+.objectif-bar-fill.fill-fond { background: #5A739A; }
+.objectif-bar-fill.fill-total{ background: #1D7A5A; }
+.objectif-amounts { font-size: 11px; font-family: var(--mono); color: var(--text-hint); white-space: nowrap; min-width: 170px; text-align: right; }
+.objectif-pct { font-size: 13px; font-weight: 500; font-family: var(--mono); white-space: nowrap; min-width: 52px; text-align: right; }
+.objectif-pct.pct-ose  { color: var(--teal); }
+.objectif-pct.pct-fond { color: #5A739A; }
+.objectif-pct.pct-total{ color: var(--teal); font-size: 15px; }
 </style>
 </head>
 <body>
@@ -386,14 +405,45 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); font
           <span><span class="dot dot-2026"></span><span id="leg-2026"></span></span>
         </div>
       </div>
-      <div class="tempo-projection">
-        <span class="tempo-projection-label">
-          Projection annuelle 2026 <span id="tp-proj-rythme"></span>
-          <span style="font-size:10px;color:var(--text-hint);font-family:var(--mono);">· association + fondation confondues</span>
-        </span>
-        <span class="tempo-projection-value" id="tp-proj"></span>
-        <span class="tempo-projection-note" id="tp-proj-note"></span>
+
+    </div>
+  </div>
+
+  <!-- Objectif 2026 -->
+  <div class="section-title" style="margin-top:28px" id="s-objectif">Nos objectifs pour 2026</div>
+  <div class="objectif-box">
+    <!-- OSE -->
+    <div class="objectif-row">
+      <div class="objectif-label"><strong>Dons OSE</strong></div>
+      <div class="objectif-bar-wrap">
+        <div class="objectif-bar-track">
+          <div class="objectif-bar-fill fill-ose" id="obj-bar-ose" style="width:0%"></div>
+        </div>
       </div>
+      <div class="objectif-amounts"><span id="obj-cumul-ose">—</span> / 738 000 €</div>
+      <div class="objectif-pct pct-ose" id="obj-pct-ose">—</div>
+    </div>
+    <!-- Fondation IFI -->
+    <div class="objectif-row">
+      <div class="objectif-label"><strong>Fondation IFI</strong></div>
+      <div class="objectif-bar-wrap">
+        <div class="objectif-bar-track">
+          <div class="objectif-bar-fill fill-fond" id="obj-bar-fond" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="objectif-amounts"><span id="obj-cumul-fond">—</span> / 868 000 €</div>
+      <div class="objectif-pct pct-fond" id="obj-pct-fond">—</div>
+    </div>
+    <!-- Total -->
+    <div class="objectif-row total-row">
+      <div class="objectif-label"><strong>Total consolidé</strong></div>
+      <div class="objectif-bar-wrap">
+        <div class="objectif-bar-track">
+          <div class="objectif-bar-fill fill-total" id="obj-bar-total" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="objectif-amounts"><span id="obj-cumul-total">—</span> / 1 606 000 €</div>
+      <div class="objectif-pct pct-total" id="obj-pct-total">—</div>
     </div>
   </div>
 
@@ -521,10 +571,10 @@ const MOIS_DATA = {
   },
   Mars: {
     annee: "2026", periode: "Janv.–Mars", ytd_label: "Janv.–Mars",
-    ose:      { raw: 24077.50, dons: 188 },
-    fond:     { raw:  6240.00, dons:   9 },
-    ytd_ose:  { raw: 75085.00, dons: 663 },
-    ytd_fond: { raw: 25440.00, dons:  17 },
+    ose:      { raw: 26007.50, dons: 209 },
+    fond:     { raw: 11240.00, dons:  10 },
+    ytd_ose:  { raw: 77015.00, dons: 684 },
+    ytd_fond: { raw: 30440.00, dons:  18 },
     emails: [
       { objet: "Mir zaynen do !",                   type: "Evènement",    date: "4/3",  dest: "4 133",  ouv: "55,4 %", clics: "1,4 %",  dons: "6",  collecte: "1 218,00 €", moyen: "203,00 €"  },
       { objet: "Le projet de Marie-Lyne",            type: "Crowdfunding", date: "10/3", dest: "4 836",  ouv: "48,9 %", clics: "10,2 %", dons: "13", collecte: "1 286,00 €", moyen: "98,92 €"   },
@@ -1159,7 +1209,7 @@ function render(mois) {
   document.getElementById('s-comp').textContent      = `${mois} ${d.annee} vs ${mois} ${refYear}`;
   document.getElementById('s-ytd').textContent       = `Cumul ${d.ytd_label} ${d.annee} vs ${d.ytd_label} ${refYear}`;
   document.getElementById('s-email').textContent     = `Campagnes email — ${mois} ${d.annee}`;
-  document.getElementById('s-tempo').textContent     = `Temps de passage — projection annuelle ${d.annee}`;
+  document.getElementById('s-tempo').textContent     = `Temps de passage — cumul vs années de référence`;
 
   renderRFM(mois);
   renderRS(mois);
@@ -1253,15 +1303,32 @@ function render(mois) {
   document.getElementById('leg-ref').textContent   = pct_n1 ? `${d.ytd_label} ${tempoRefYear} — ${pct_n1} %` : `${d.ytd_label} ${tempoRefYear}`;
   document.getElementById('leg-2026').textContent  = pct_n  ? `${d.ytd_label} 2026 — ${pct_n} %`            : `${d.ytd_label} 2026 (en attente)`;
 
-  document.getElementById('tp-proj-rythme').textContent = `(rythme ${tempoRefYear} appliqué)`;
-  if (pct_n1 && cumul_n) {
-    const proj = cumul_n / (parseFloat(pct_n1) / 100);
-    document.getElementById('tp-proj').textContent      = `≈ ${fmtEurShort(Math.round(proj / 1000) * 1000)}`;
-    document.getElementById('tp-proj-note').textContent = `${fmtEur(cumul_n)} ÷ ${pct_n1} % · estimation indicative`;
-  } else {
-    document.getElementById('tp-proj').textContent      = '— (données en attente)';
-    document.getElementById('tp-proj-note').textContent = '';
+
+  // ── Objectif 2026 ──────────────────────────────────────────────────────
+  const BUDGET_OSE  = 738000;
+  const BUDGET_FOND = 868000;
+  const BUDGET_TOTAL = BUDGET_OSE + BUDGET_FOND; // 1 606 000
+
+  const ytd_ose_raw  = (!d.pending && d.ytd_ose.raw  !== null) ? d.ytd_ose.raw  : null;
+  const ytd_fond_raw = (!d.pending && d.ytd_fond.raw !== null) ? d.ytd_fond.raw : null;
+  const ytd_total    = (ytd_ose_raw !== null && ytd_fond_raw !== null) ? ytd_ose_raw + ytd_fond_raw : null;
+
+  function setObjRow(barId, cumulId, pctId, val, budget) {
+    if (val !== null) {
+      const pct = (val / budget * 100);
+      document.getElementById(barId).style.width   = `${Math.min(pct, 100)}%`;
+      document.getElementById(cumulId).textContent = fmtEur(val);
+      document.getElementById(pctId).textContent   = `${pct.toFixed(1).replace('.', ',')} %`;
+    } else {
+      document.getElementById(barId).style.width   = '0%';
+      document.getElementById(cumulId).textContent = '—';
+      document.getElementById(pctId).textContent   = '—';
+    }
   }
+
+  setObjRow('obj-bar-ose',   'obj-cumul-ose',   'obj-pct-ose',   ytd_ose_raw,  BUDGET_OSE);
+  setObjRow('obj-bar-fond',  'obj-cumul-fond',  'obj-pct-fond',  ytd_fond_raw, BUDGET_FOND);
+  setObjRow('obj-bar-total', 'obj-cumul-total', 'obj-pct-total', ytd_total,    BUDGET_TOTAL);
 }
 
 function applyEmailColors() {

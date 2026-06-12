@@ -606,7 +606,29 @@ const MOIS_DATA = {
     emails_total: { dest: "19 531", dons: "26", collecte: "5 080,00 €", moyen: "195,38 €" },
     emails_pending: false,
   },
-  Mai:        { annee: "2026", periode: "Janv.–Mai",      ytd_label: "Janv.–Mai",      pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Mai: {
+    annee: "2026", periode: "Janv.–Mai", ytd_label: "Janv.–Mai",
+    ose:      { raw: 80754.50, dons: 169 },
+    fond:     { raw: 313077.00, dons: 162 },
+    ytd_ose:  { raw: 191330.00, dons: 1163 },
+    ytd_fond: { raw: 379783.00, dons:  218 },
+    emails: [
+      { objet: "Ensemble, brisons l'isolement de nos aînés · IFI",         type: "Campagne", date: "3/5",  dest: "104",   ouv: "79,81 %", clics: "6,02 %",  dons: "0",  collecte: "—",          moyen: "—"        },
+      { objet: "Ensemble, brisons l'isolement de nos aînés · IR",          type: "Campagne", date: "3/5",  dest: "841",   ouv: "76,46 %", clics: "7,00 %",  dons: "4",  collecte: "402,00 €",   moyen: "134,00 €" },
+      { objet: "Pour que chaque enfant bénéficie d'un parcours sur mesure · IFI", type: "Campagne", date: "5/5",  dest: "452",   ouv: "57,21 %", clics: "3,49 %",  dons: "0",  collecte: "—",          moyen: "—"        },
+      { objet: "Pour que chaque enfant bénéficie d'un parcours sur mesure · IR",  type: "Campagne", date: "5/5",  dest: "4 343", ouv: "30,34 %", clics: "3,78 %",  dons: "1",  collecte: "311,00 €",   moyen: "311,00 €" },
+      { objet: "Du sur-mesure pour révéler chaque enfant · IFI",           type: "Campagne", date: "7/5",  dest: "361",   ouv: "50,83 %", clics: "10,83 %", dons: "1",  collecte: "—",          moyen: "—"        },
+      { objet: "Du sur-mesure pour révéler chaque enfant · IR",            type: "Campagne", date: "7/5",  dest: "3 490", ouv: "38,13 %", clics: "3,60 %",  dons: "4",  collecte: "300,00 €",   moyen: "300,00 €" },
+      { objet: "1 enfant sur 10 est victime de violences · IFI",           type: "Campagne", date: "12/5", dest: "419",   ouv: "56,12 %", clics: "8,12 %",  dons: "1",  collecte: "—",          moyen: "—"        },
+      { objet: "🎉 Bonne nouvelle : votre réduction d'impôt × 2 ! · IR",  type: "Campagne", date: "12/5", dest: "4 267", ouv: "49,03 %", clics: "3,95 %",  dons: "12", collecte: "1 150,00 €", moyen: "575,00 €" },
+      { objet: "Notre priorité : prévenir les violences · IFI",            type: "Campagne", date: "15/5", dest: "180",   ouv: "21,91 %", clics: "51,28 %", dons: "0",  collecte: "—",          moyen: "—"        },
+      { objet: "⚠️ Votre réduction d'impôt à 75% · IR",                  type: "Campagne", date: "15/5", dest: "2 396", ouv: "15,28 %", clics: "21,97 %", dons: "2",  collecte: "1 100,00 €", moyen: "550,00 €" },
+      { objet: "Il est temps de penser à l'IFI · IFI",                    type: "Campagne", date: "19/5", dest: "356",   ouv: "58,06 %", clics: "6,53 %",  dons: "0",  collecte: "—",          moyen: "—"        },
+      { objet: "1 enfant sur 10 est victime de violences · IR",            type: "Campagne", date: "19/5", dest: "3 937", ouv: "46,00 %", clics: "4,56 %",  dons: "4",  collecte: "126,00 €",   moyen: "31,50 €"  },
+    ],
+    emails_total: { dest: "21 146", dons: "29", collecte: "3 389,00 €", moyen: "116,86 €" },
+    emails_pending: false,
+  },
   Juin:       { annee: "2026", periode: "Janv.–Juin",     ytd_label: "Janv.–Juin",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
   Juillet:    { annee: "2026", periode: "Janv.–Juil.",    ytd_label: "Janv.–Juil.",    pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
   Août:       { annee: "2026", periode: "Janv.–Août",     ytd_label: "Janv.–Août",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
@@ -650,6 +672,12 @@ const RFM_DATA = {
     segments: { Champion: 421, Fid_Loyaux: 1196, Potentiels: 136, Nouveaux: 313, Revenus: 108, Occasionnel: 987, Risque_fuite: 152, Endormis: 272, Perdu: 7500 },
     prospect: 10171,
     total: 11085,
+  },
+  Mai: {
+    date: '31 mai 2026',
+    segments: { Champion: 438, Fid_Loyaux: 1203, Potentiels: 111, Nouveaux: 312, Revenus: 108, Occasionnel: 959, Risque_fuite: 171, Endormis: 271, Perdu: 7540 },
+    prospect: 10177,
+    total: 11113,
   },
 };
 
@@ -907,7 +935,6 @@ function renderRS(mois) {
   const fmt = n => (n != null) ? new Intl.NumberFormat('fr-FR').format(n) : '—';
   const fmtPct = n => (n != null) ? n.toFixed(2).replace('.',',') + ' %' : '—';
 
-  // Summary metrics
   const summaryCards = [
     { label: 'Publications',        value: posts.length },
     { label: pData.mainLabel,       value: fmt(total[pData.mainMetric]) },
@@ -915,7 +942,6 @@ function renderRS(mois) {
     { label: "Taux d'engagement",   value: fmtPct(total.taux) },
   ].map(c => `<div class="metric"><div class="metric-label">${c.label}</div><div class="metric-value" style="font-size:16px">${c.value}</div></div>`).join('');
 
-  // Posts table
   const headerCells = cols.map(c => `<th>${c}</th>`).join('');
   const bodyRows = posts.map(p => {
     const cells = keys.map(k => {
@@ -932,7 +958,6 @@ function renderRS(mois) {
     return `<td>${fmt(total[k])}</td>`;
   }).join('');
 
-  // Top cards
   const topCards = tops.map((t, i) => `
     <div class="rs-top-card">
       <div class="rs-top-rank">${tops.length > 1 ? (i+1) : '★'}</div>
@@ -973,7 +998,7 @@ function setTab(tab) {
   render(currentMois);
 }
 
-// ── RFM definitions (tooltip content) ────────────────────────
+// ── RFM definitions ───────────────────────────────────────────
 const RFM_DEFS = {
   Champion:     { recence: '0 – 24 mois', frequence: '2 – 7 dons', montant: '≥ 1 500 € cumulés ou ≥ 500 €/an', desc: 'Grands donateurs fidélisés ayant renouvelé au moins une fois leur don.' },
   Fid_Loyaux:   { recence: '0 – 24 mois', frequence: '3 – 7 dons', montant: '0 – 1 500 € (max 500 €/an)', desc: 'Donateurs fréquents et sûrs.' },
@@ -999,17 +1024,14 @@ function renderRFM(mois) {
     return;
   }
 
-  // Previous month (always the one just before in the list)
   const prevIdx  = MOIS_ORDER.indexOf(mois) - 1;
   const prevMois = prevIdx >= 0 ? MOIS_ORDER[prevIdx] : null;
   const prevData = prevMois ? RFM_DATA[prevMois] : null;
 
-  // Segment cards
   const cards = RFM_META.map(m => {
     const count = data.segments[m.key] || 0;
     const def   = RFM_DEFS[m.key] || {};
 
-    // Tooltip HTML
     const tooltip = `<span class="rfm-info" tabindex="0">i
       <span class="rfm-tooltip">
         <div class="rfm-tooltip-title">${m.label}</div>
@@ -1020,7 +1042,6 @@ function renderRFM(mois) {
       </span>
     </span>`;
 
-    // Evolution vs previous month
     let evoHtml = `<span class="rfm-card-no-prev">premier mois disponible</span>`;
     if (prevData && prevData.segments[m.key] != null) {
       const prev  = prevData.segments[m.key];
@@ -1043,7 +1064,6 @@ function renderRFM(mois) {
     </div>`;
   }).join('');
 
-  // Prospect card
   let prospectHtml = '';
   if (data.prospect !== null) {
     const prevProspect = prevData?.prospect ?? null;
@@ -1078,10 +1098,8 @@ function renderRFM(mois) {
   `;
 }
 
-
-
 // ── State ─────────────────────────────────────────────────────
-let currentMois   = "Avril";
+let currentMois   = "Mai";
 let currentFilter = "total";
 let refYear       = 2025;
 let tempoRefYear  = 2025;
@@ -1118,7 +1136,7 @@ function pctOf(val, total) {
   return (val / total * 100).toFixed(2);
 }
 
-// ── Historical data helpers ────────────────────────────────────
+// ── Historical helpers ────────────────────────────────────────
 function getHistMonth(mois, year) {
   return HIST[year]?.[mois] || { ose: { raw: 0, dons: 0 }, fond: { raw: 0, dons: 0 } };
 }
@@ -1158,7 +1176,7 @@ function getFiltered(mois) {
   };
 }
 
-// ── Controls ─────────────────────────────────────────────────
+// ── Controls ──────────────────────────────────────────────────
 function setFilter(f) {
   currentFilter = f;
   document.querySelectorAll('.sidebar-pill').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
@@ -1200,7 +1218,7 @@ function render(mois) {
   const tabTitles = { dons: 'Rapport des dons', email: 'Rapport des mails', rs: 'Rapport RS', rfm: 'RFM' };
   document.getElementById('h-title').textContent = `${tabTitles[currentTab] || 'Rapport des dons'} — ${mois} ${d.annee}`;
   document.getElementById('h-meta').innerHTML =
-    `Période ${d.periode} ${d.annee}<br>Préparé pour Simon<br>Date 30 ${mois.toLowerCase()} ${d.annee}`;
+    `Période ${d.periode} ${d.annee}<br>Préparé pour Simon<br>Date 31 ${mois.toLowerCase()} ${d.annee}`;
 
   const badgeLabels = { total: 'Association + Fondation', asso: 'Association OSE uniquement', fond: 'Fondation OSE-MES uniquement' };
   document.getElementById('zone-badge-text').textContent = badgeLabels[currentFilter];
@@ -1303,11 +1321,10 @@ function render(mois) {
   document.getElementById('leg-ref').textContent   = pct_n1 ? `${d.ytd_label} ${tempoRefYear} — ${pct_n1} %` : `${d.ytd_label} ${tempoRefYear}`;
   document.getElementById('leg-2026').textContent  = pct_n  ? `${d.ytd_label} 2026 — ${pct_n} %`            : `${d.ytd_label} 2026 (en attente)`;
 
-
-  // ── Objectif 2026 ──────────────────────────────────────────────────────
-  const BUDGET_OSE  = 738000;
-  const BUDGET_FOND = 868000;
-  const BUDGET_TOTAL = BUDGET_OSE + BUDGET_FOND; // 1 606 000
+  // ── Objectif 2026 ─────────────────────────────────────────────
+  const BUDGET_OSE   = 738000;
+  const BUDGET_FOND  = 868000;
+  const BUDGET_TOTAL = BUDGET_OSE + BUDGET_FOND;
 
   const ytd_ose_raw  = (!d.pending && d.ytd_ose.raw  !== null) ? d.ytd_ose.raw  : null;
   const ytd_fond_raw = (!d.pending && d.ytd_fond.raw !== null) ? d.ytd_fond.raw : null;
@@ -1347,7 +1364,7 @@ function applyEmailColors() {
   });
 }
 
-render('Avril');
+render('Mai');
 </script>
 </body>
 </html>

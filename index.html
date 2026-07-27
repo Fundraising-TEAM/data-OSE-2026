@@ -557,9 +557,9 @@ const MOIS_DATA = {
   },
   Février: {
     annee: "2026", periode: "Janv.–Févr.", ytd_label: "Janv.–Févr.",
-    ose:      { raw: 34759.50, dons: 204 },
+    ose:      { raw: 34744.50, dons: 203 },
     fond:     { raw: 15700.00, dons:   6 },
-    ytd_ose:  { raw: 52667.50, dons: 512 },
+    ytd_ose:  { raw: 52652.50, dons: 511 },
     ytd_fond: { raw: 19200.00, dons:   8 },
     emails: [
       { objet: "Vous êtes invité(e) au Salon du Livre", type: "Evènement", date: "6/2",  dest: "4 627",  ouv: "55,5 %", clics: "4,4 %", dons: "1", collecte: "200,00 €", moyen: "200,00 €" },
@@ -573,7 +573,7 @@ const MOIS_DATA = {
     annee: "2026", periode: "Janv.–Mars", ytd_label: "Janv.–Mars",
     ose:      { raw: 26132.50, dons: 211 },
     fond:     { raw: 11240.00, dons:  10 },
-    ytd_ose:  { raw: 78800.00, dons: 723 },
+    ytd_ose:  { raw: 78785.00, dons: 722 },
     ytd_fond: { raw: 30440.00, dons:  18 },
     emails: [
       { objet: "Mir zaynen do !",                   type: "Evènement",    date: "4/3",  dest: "4 133",  ouv: "55,4 %", clics: "1,4 %",  dons: "6",  collecte: "1 218,00 €", moyen: "203,00 €"  },
@@ -588,9 +588,9 @@ const MOIS_DATA = {
   },
   Avril: {
     annee: "2026", periode: "Janv.–Avril", ytd_label: "Janv.–Avril",
-    ose:      { raw: 31775.50, dons: 271 },
+    ose:      { raw: 32095.50, dons: 273 },
     fond:     { raw: 36266.00, dons:  38 },
-    ytd_ose:  { raw: 110575.50, dons: 994 },
+    ytd_ose:  { raw: 110880.50, dons: 995 },
     ytd_fond: { raw:  66706.00, dons:  56 },
     emails: [
       { objet: "Impôt sur le revenu 2026 : le portail est ouvert !",    type: "Campagne", date: "10/4", dest: "4 955", ouv: "48,3 %", clics: "1,5 %",  dons: "4",  collecte: "318,00 €",   moyen: "79,50 €"  },
@@ -608,10 +608,10 @@ const MOIS_DATA = {
   },
   Mai: {
     annee: "2026", periode: "Janv.–Mai", ytd_label: "Janv.–Mai",
-    ose:      { raw: 80854.50, dons: 174 },
-    fond:     { raw: 316227.00, dons: 166 },
-    ytd_ose:  { raw: 191430.00, dons: 1168 },
-    ytd_fond: { raw: 382933.00, dons:  222 },
+    ose:      { raw: 81264.50, dons: 180 },
+    fond:     { raw: 317227.00, dons: 166 },
+    ytd_ose:  { raw: 192145.00, dons: 1175 },
+    ytd_fond: { raw: 383933.00, dons:  222 },
     emails: [
       { objet: "Ensemble, brisons l'isolement de nos aînés · IFI",         type: "Campagne", date: "3/5",  dest: "104",   ouv: "79,81 %", clics: "6,02 %",  dons: "0",  collecte: "—",          moyen: "—"        },
       { objet: "Ensemble, brisons l'isolement de nos aînés · IR",          type: "Campagne", date: "3/5",  dest: "841",   ouv: "76,46 %", clics: "7,00 %",  dons: "4",  collecte: "402,00 €",   moyen: "134,00 €" },
@@ -629,7 +629,14 @@ const MOIS_DATA = {
     emails_total: { dest: "21 146", dons: "29", collecte: "3 389,00 €", moyen: "116,86 €" },
     emails_pending: false,
   },
-  Juin:       { annee: "2026", periode: "Janv.–Juin",     ytd_label: "Janv.–Juin",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Juin: {
+    annee: "2026", periode: "Janv.–Juin", ytd_label: "Janv.–Juin",
+    ose:      { raw: 24634.50, dons: 136 },
+    fond:     { raw: 167019.00, dons: 64 },
+    ytd_ose:  { raw: 216779.50, dons: 1311 },
+    ytd_fond: { raw: 550952.00, dons:  286 },
+    emails: [], emails_pending: true,
+  },
   Juillet:    { annee: "2026", periode: "Janv.–Juil.",    ytd_label: "Janv.–Juil.",    pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
   Août:       { annee: "2026", periode: "Janv.–Août",     ytd_label: "Janv.–Août",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
   Septembre:  { annee: "2026", periode: "Janv.–Sept.",    ytd_label: "Janv.–Sept.",    pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
@@ -678,6 +685,12 @@ const RFM_DATA = {
     segments: { Champion: 438, Fid_Loyaux: 1203, Potentiels: 111, Nouveaux: 312, Revenus: 108, Occasionnel: 959, Risque_fuite: 171, Endormis: 271, Perdu: 7540 },
     prospect: 10177,
     total: 11113,
+  },
+  Juin: {
+    date: '30 juin 2026',
+    segments: { Champion: 458, Fid_Loyaux: 1197, Potentiels: 101, Nouveaux: 193, Revenus: 70, Occasionnel: 1097, Risque_fuite: 176, Endormis: 278, Perdu: 7553 },
+    prospect: 10181,
+    total: 11123,
   },
 };
 
@@ -1099,7 +1112,7 @@ function renderRFM(mois) {
 }
 
 // ── State ─────────────────────────────────────────────────────
-let currentMois   = "Mai";
+let currentMois   = "Juin";
 let currentFilter = "total";
 let refYear       = 2025;
 let tempoRefYear  = 2025;
@@ -1218,7 +1231,7 @@ function render(mois) {
   const tabTitles = { dons: 'Rapport des dons', email: 'Rapport des mails', rs: 'Rapport RS', rfm: 'RFM' };
   document.getElementById('h-title').textContent = `${tabTitles[currentTab] || 'Rapport des dons'} — ${mois} ${d.annee}`;
   document.getElementById('h-meta').innerHTML =
-    `Période ${d.periode} ${d.annee}<br>Préparé pour Simon<br>Date 31 ${mois.toLowerCase()} ${d.annee}`;
+    `Période ${d.periode} ${d.annee}<br>Préparé pour Simon<br>Date 30 ${mois.toLowerCase()} ${d.annee}`;
 
   const badgeLabels = { total: 'Association + Fondation', asso: 'Association OSE uniquement', fond: 'Fondation OSE-MES uniquement' };
   document.getElementById('zone-badge-text').textContent = badgeLabels[currentFilter];
@@ -1364,7 +1377,7 @@ function applyEmailColors() {
   });
 }
 
-render('Mai');
+render('Juin');
 </script>
 </body>
 </html>

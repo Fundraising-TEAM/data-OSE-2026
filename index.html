@@ -637,7 +637,19 @@ const MOIS_DATA = {
     ytd_fond: { raw: 550952.00, dons:  286 },
     emails: [], emails_pending: true,
   },
-  Juillet:    { annee: "2026", periode: "Janv.–Juil.",    ytd_label: "Janv.–Juil.",    pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Juillet: {
+    annee: "2026", periode: "Janv.–Juil.", ytd_label: "Janv.–Juil.",
+    ose:      { raw: 21020.50, dons: 138 },
+    fond:     { raw:     0.00, dons:   0 },
+    ytd_ose:  { raw: 237800.00, dons: 1449 },
+    ytd_fond: { raw: 550952.00, dons:  286 },
+    emails: [
+      { objet: "Donnez une seconde vie au cèdre d'Elie Wiesel !",        type: "Crowdfunding", date: "20/7", dest: "4 917", ouv: "46,27 %", clics: "4,6 %",  dons: "15", collecte: "1 128,00 €", moyen: "75,20 €"  },
+      { objet: "Une nouvelle vie pour le cèdre d'Elie Wiesel !",         type: "Crowdfunding", date: "22/7", dest: "2 857", ouv: "16,52 %", clics: "4,2 %",  dons: "5",  collecte: "876,00 €",   moyen: "175,20 €" },
+    ],
+    emails_total: { dest: "7 774", dons: "20", collecte: "2 004,00 €", moyen: "100,20 €" },
+    emails_pending: false,
+  },
   Août:       { annee: "2026", periode: "Janv.–Août",     ytd_label: "Janv.–Août",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
   Septembre:  { annee: "2026", periode: "Janv.–Sept.",    ytd_label: "Janv.–Sept.",    pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
   Octobre:    { annee: "2026", periode: "Janv.–Oct.",     ytd_label: "Janv.–Oct.",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
@@ -691,6 +703,12 @@ const RFM_DATA = {
     segments: { Champion: 458, Fid_Loyaux: 1197, Potentiels: 101, Nouveaux: 193, Revenus: 70, Occasionnel: 1097, Risque_fuite: 176, Endormis: 278, Perdu: 7553 },
     prospect: 10181,
     total: 11123,
+  },
+  Juillet: {
+    date: '31 juillet 2026',
+    segments: { Champion: 453, Fid_Loyaux: 1201, Potentiels: 108, Nouveaux: 145, Revenus: 28, Occasionnel: 1177, Risque_fuite: 178, Endormis: 273, Perdu: 7583 },
+    prospect: 10181,
+    total: 11146,
   },
 };
 
@@ -1112,7 +1130,7 @@ function renderRFM(mois) {
 }
 
 // ── State ─────────────────────────────────────────────────────
-let currentMois   = "Juin";
+let currentMois   = "Juillet";
 let currentFilter = "total";
 let refYear       = 2025;
 let tempoRefYear  = 2025;
@@ -1377,7 +1395,7 @@ function applyEmailColors() {
   });
 }
 
-render('Juin');
+render('Juillet');
 </script>
 </body>
 </html>

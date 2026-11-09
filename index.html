@@ -151,6 +151,7 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); font
 .badge-event    { background: var(--blue-bg);  color: var(--blue);  }
 .badge-crowd    { background: var(--teal-bg);  color: var(--teal);  }
 .badge-campaign { background: var(--amber-bg); color: var(--amber); }
+.badge-fete     { background: #EEF0FB; color: #3A3A8A; }
 
 /* ── Mail table ── */
 .mail-table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -545,7 +546,6 @@ const HIST = {
 
 // ═══════════════════════════════════════════════════════════════
 //  DONNÉES 2026 — mois en cours + YTD
-//  (Mars → Août réalignés sur le tableau récapitulatif reçu en octobre)
 // ═══════════════════════════════════════════════════════════════
 const MOIS_DATA = {
   Janvier: {
@@ -577,7 +577,7 @@ const MOIS_DATA = {
     ytd_ose:  { raw: 78730.00, dons: 720 },
     ytd_fond: { raw: 30440.00, dons:  18 },
     emails: [
-      { objet: "Mir zaynen do !",                   type: "Evènement",    date: "4/3",  dest: "4 133",  ouv: "55,4 %", clics: "1,4 %",  dons: "6",  collecte: "1 218,00 €", moyen: "203,00 €"  },
+      { objet: "Mir zaynen do !",                   type: "Fête juive",   date: "4/3",  dest: "4 133",  ouv: "55,4 %", clics: "1,4 %",  dons: "6",  collecte: "1 218,00 €", moyen: "203,00 €"  },
       { objet: "Le projet de Marie-Lyne",            type: "Crowdfunding", date: "10/3", dest: "4 836",  ouv: "48,9 %", clics: "10,2 %", dons: "13", collecte: "1 286,00 €", moyen: "98,92 €"   },
       { objet: "On y est presque !",                 type: "Crowdfunding", date: "19/3", dest: "1 038",  ouv: "72,9 %", clics: "6,8 %",  dons: "11", collecte: "1 112,00 €", moyen: "101,09 €"  },
       { objet: "Bonnes fêtes de Pessah",             type: "Campagne",     date: "27/3", dest: "11 629", ouv: "38,6 %", clics: "6,8 %",  dons: "9",  collecte: "923,00 €",   moyen: "102,56 €"  },
@@ -594,17 +594,17 @@ const MOIS_DATA = {
     ytd_ose:  { raw: 110850.50, dons: 993 },
     ytd_fond: { raw:  66706.00, dons:  56 },
     emails: [
-      { objet: "Impôt sur le revenu 2026 : le portail est ouvert !",    type: "Campagne", date: "10/4", dest: "4 955", ouv: "48,3 %", clics: "1,5 %",  dons: "4",  collecte: "318,00 €",   moyen: "79,50 €"  },
-      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · IFI",       type: "Campagne", date: "20/4", dest: "472",   ouv: "54,3 %", clics: "4,5 %",  dons: "0",  collecte: "—",          moyen: "—"        },
-      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · IR",        type: "Campagne", date: "20/4", dest: "4 126", ouv: "44,8 %", clics: "2,6 %",  dons: "6",  collecte: "422,00 €",   moyen: "70,33 €"  },
-      { objet: "Message d'Arié Flack — Appel à votre soutien · IFI",   type: "Campagne", date: "23/4", dest: "456",   ouv: "60,2 %", clics: "2,2 %",  dons: "0",  collecte: "—",          moyen: "—"        },
-      { objet: "Message d'Arié Flack — Appel à votre soutien · IR",    type: "Campagne", date: "23/4", dest: "4 096", ouv: "48,0 %", clics: "1,5 %",  dons: "10", collecte: "2 706,00 €", moyen: "270,60 €" },
-      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · All",       type: "Campagne", date: "23/4", dest: "331",   ouv: "43,5 %", clics: "2,5 %",  dons: "2",  collecte: "880,00 €",   moyen: "440,00 €" },
-      { objet: "Message d'Arié Flack — Appel à votre soutien · All",   type: "Campagne", date: "26/4", dest: "329",   ouv: "55,9 %", clics: "12,7 %", dons: "1",  collecte: "500,00 €",   moyen: "500,00 €" },
-      { objet: "Ensemble, brisons l'isolement de nos aînés · IFI",     type: "Campagne", date: "29/4", dest: "471",   ouv: "51,5 %", clics: "4,3 %",  dons: "0",  collecte: "—",          moyen: "—"        },
-      { objet: "Ensemble, brisons l'isolement de nos aînés · IR",      type: "Campagne", date: "29/4", dest: "4 295", ouv: "39,6 %", clics: "2,2 %",  dons: "3",  collecte: "254,00 €",   moyen: "84,67 €"  },
+      { objet: "Impôt sur le revenu 2026 : le portail est ouvert !",    type: "Campagne", date: "10/4", dest: "4 955", ouv: "48,30 %", clics: "3,06 %",  dons: "5",  collecte: "1 318,00 €", moyen: "263,60 €"   },
+      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · IFI",       type: "Campagne", date: "20/4", dest: "472",   ouv: "54,24 %", clics: "8,24 %",  dons: "2",  collecte: "2 000,00 €", moyen: "1 000,00 €" },
+      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · IR",        type: "Campagne", date: "20/4", dest: "4 126", ouv: "44,85 %", clics: "5,77 %",  dons: "8",  collecte: "1 302,00 €", moyen: "162,75 €"   },
+      { objet: "Message d'Arié Flack — Appel à votre soutien · IFI",   type: "Campagne", date: "23/4", dest: "456",   ouv: "60,22 %", clics: "3,65 %",  dons: "1",  collecte: "156,00 €",   moyen: "156,00 €"   },
+      { objet: "Message d'Arié Flack — Appel à votre soutien · IR",    type: "Campagne", date: "23/4", dest: "4 096", ouv: "48,03 %", clics: "3,10 %",  dons: "12", collecte: "4 206,00 €", moyen: "350,50 €"   },
+      { objet: "[VIDEO] Qui sauve une vie, sauve le monde · All",       type: "Campagne", date: "23/4", dest: "331",   ouv: "43,52 %", clics: "5,67 %",  dons: "0",  collecte: "—",          moyen: "—"          },
+      { objet: "Message d'Arié Flack — Appel à votre soutien · All",   type: "Campagne", date: "26/4", dest: "329",   ouv: "55,90 %", clics: "22,78 %", dons: "2",  collecte: "2 700,00 €", moyen: "1 350,00 €" },
+      { objet: "Ensemble, brisons l'isolement de nos aînés · IFI",     type: "Campagne", date: "29/4", dest: "471",   ouv: "51,49 %", clics: "8,26 %",  dons: "2",  collecte: "500,00 €",   moyen: "250,00 €"   },
+      { objet: "Ensemble, brisons l'isolement de nos aînés · IR",      type: "Campagne", date: "29/4", dest: "4 295", ouv: "39,57 %", clics: "5,50 %",  dons: "8",  collecte: "1 908,00 €", moyen: "238,50 €"   },
     ],
-    emails_total: { dest: "19 531", dons: "26", collecte: "5 080,00 €", moyen: "195,38 €" },
+    emails_total: { dest: "19 531", dons: "40", collecte: "14 090,00 €", moyen: "352,25 €" },
     emails_pending: false,
   },
   Mai: {
@@ -614,20 +614,20 @@ const MOIS_DATA = {
     ytd_ose:  { raw: 192285.00, dons: 1177 },
     ytd_fond: { raw: 382933.00, dons:  221 },
     emails: [
-      { objet: "Ensemble, brisons l'isolement de nos aînés · IFI",         type: "Campagne", date: "3/5",  dest: "104",   ouv: "79,81 %", clics: "6,02 %",  dons: "0",  collecte: "—",          moyen: "—"        },
-      { objet: "Ensemble, brisons l'isolement de nos aînés · IR",          type: "Campagne", date: "3/5",  dest: "841",   ouv: "76,46 %", clics: "7,00 %",  dons: "4",  collecte: "402,00 €",   moyen: "134,00 €" },
-      { objet: "Pour que chaque enfant bénéficie d'un parcours sur mesure · IFI", type: "Campagne", date: "5/5",  dest: "452",   ouv: "57,21 %", clics: "3,49 %",  dons: "0",  collecte: "—",          moyen: "—"        },
-      { objet: "Pour que chaque enfant bénéficie d'un parcours sur mesure · IR",  type: "Campagne", date: "5/5",  dest: "4 343", ouv: "30,34 %", clics: "3,78 %",  dons: "1",  collecte: "311,00 €",   moyen: "311,00 €" },
-      { objet: "Du sur-mesure pour révéler chaque enfant · IFI",           type: "Campagne", date: "7/5",  dest: "361",   ouv: "50,83 %", clics: "10,83 %", dons: "1",  collecte: "—",          moyen: "—"        },
-      { objet: "Du sur-mesure pour révéler chaque enfant · IR",            type: "Campagne", date: "7/5",  dest: "3 490", ouv: "38,13 %", clics: "3,60 %",  dons: "4",  collecte: "300,00 €",   moyen: "300,00 €" },
-      { objet: "1 enfant sur 10 est victime de violences · IFI",           type: "Campagne", date: "12/5", dest: "419",   ouv: "56,12 %", clics: "8,12 %",  dons: "1",  collecte: "—",          moyen: "—"        },
-      { objet: "🎉 Bonne nouvelle : votre réduction d'impôt × 2 ! · IR",  type: "Campagne", date: "12/5", dest: "4 267", ouv: "49,03 %", clics: "3,95 %",  dons: "12", collecte: "1 150,00 €", moyen: "575,00 €" },
-      { objet: "Notre priorité : prévenir les violences · IFI",            type: "Campagne", date: "15/5", dest: "180",   ouv: "21,91 %", clics: "51,28 %", dons: "0",  collecte: "—",          moyen: "—"        },
-      { objet: "⚠️ Votre réduction d'impôt à 75% · IR",                  type: "Campagne", date: "15/5", dest: "2 396", ouv: "15,28 %", clics: "21,97 %", dons: "2",  collecte: "1 100,00 €", moyen: "550,00 €" },
-      { objet: "Il est temps de penser à l'IFI · IFI",                    type: "Campagne", date: "19/5", dest: "356",   ouv: "58,06 %", clics: "6,53 %",  dons: "0",  collecte: "—",          moyen: "—"        },
-      { objet: "1 enfant sur 10 est victime de violences · IR",            type: "Campagne", date: "19/5", dest: "3 937", ouv: "46,00 %", clics: "4,56 %",  dons: "4",  collecte: "126,00 €",   moyen: "31,50 €"  },
+      { objet: "Ensemble, brisons l'isolement de nos aînés · IFI",         type: "Campagne", date: "3/5",  dest: "104",   ouv: "79,81 %", clics: "6,02 %",  dons: "2",  collecte: "2 190,00 €",  moyen: "1 095,00 €" },
+      { objet: "Ensemble, brisons l'isolement de nos aînés · IR",          type: "Campagne", date: "3/5",  dest: "841",   ouv: "76,46 %", clics: "7,00 %",  dons: "0",  collecte: "—",           moyen: "—"          },
+      { objet: "Pour que chaque enfant bénéficie d'un parcours sur mesure · IFI", type: "Campagne", date: "5/5",  dest: "452",   ouv: "57,21 %", clics: "3,49 %",  dons: "3",  collecte: "2 000,00 €",  moyen: "666,67 €"   },
+      { objet: "Pour que chaque enfant bénéficie d'un parcours sur mesure · IR",  type: "Campagne", date: "5/5",  dest: "4 343", ouv: "30,34 %", clics: "3,78 %",  dons: "3",  collecte: "311,00 €",    moyen: "103,67 €"   },
+      { objet: "Du sur-mesure pour révéler chaque enfant · IFI",           type: "Campagne", date: "7/5",  dest: "361",   ouv: "50,83 %", clics: "10,93 %", dons: "6",  collecte: "13 500,00 €", moyen: "2 250,00 €" },
+      { objet: "Du sur-mesure pour révéler chaque enfant · IR",            type: "Campagne", date: "7/5",  dest: "3 490", ouv: "38,13 %", clics: "3,60 %",  dons: "1",  collecte: "300,00 €",    moyen: "300,00 €"   },
+      { objet: "1 enfant sur 10 est victime de violences · IFI",           type: "Campagne", date: "12/5", dest: "419",   ouv: "56,12 %", clics: "8,12 %",  dons: "4",  collecte: "2 500,00 €",  moyen: "625,00 €"   },
+      { objet: "🎉 Bonne nouvelle : votre réduction d'impôt × 2 ! · IR",  type: "Campagne", date: "12/5", dest: "4 267", ouv: "49,03 %", clics: "3,95 %",  dons: "2",  collecte: "1 150,00 €",  moyen: "575,00 €"   },
+      { objet: "Notre priorité : prévenir les violences · IFI",            type: "Campagne", date: "15/5", dest: "180",   ouv: "21,91 %", clics: "51,28 %", dons: "2",  collecte: "6 000,00 €",  moyen: "3 000,00 €" },
+      { objet: "⚠️ Votre réduction d'impôt à 75% · IR",                  type: "Campagne", date: "15/5", dest: "2 396", ouv: "15,28 %", clics: "21,97 %", dons: "2",  collecte: "1 100,00 €",  moyen: "550,00 €"   },
+      { objet: "Il est temps de penser à l'IFI · IFI",                    type: "Campagne", date: "19/5", dest: "356",   ouv: "56,06 %", clics: "4,52 %",  dons: "5",  collecte: "13 500,00 €", moyen: "2 700,00 €" },
+      { objet: "1 enfant sur 10 est victime de violences · IR",            type: "Campagne", date: "19/5", dest: "3 937", ouv: "46,00 %", clics: "4,56 %",  dons: "1",  collecte: "126,00 €",    moyen: "126,00 €"   },
     ],
-    emails_total: { dest: "21 146", dons: "29", collecte: "3 389,00 €", moyen: "116,86 €" },
+    emails_total: { dest: "21 146", dons: "31", collecte: "42 677,00 €", moyen: "1 376,68 €" },
     emails_pending: false,
   },
   Juin: {
@@ -640,22 +640,23 @@ const MOIS_DATA = {
   },
   Juillet: {
     annee: "2026", periode: "Janv.–Juil.", ytd_label: "Janv.–Juil.",
-    ose:      { raw: 24165.46, dons: 164 },
+    ose:      { raw: 24465.40, dons: 165 },
     fond:     { raw:     0.00, dons:   0 },
-    ytd_ose:  { raw: 241334.96, dons: 1482 },
+    ytd_ose:  { raw: 241634.90, dons: 1483 },
     ytd_fond: { raw: 553788.00, dons:  291 },
     emails: [
-      { objet: "Donnez une seconde vie au cèdre d'Elie Wiesel !",        type: "Crowdfunding", date: "20/7", dest: "4 917", ouv: "46,27 %", clics: "4,6 %",  dons: "15", collecte: "1 128,00 €", moyen: "75,20 €"  },
-      { objet: "Une nouvelle vie pour le cèdre d'Elie Wiesel !",         type: "Crowdfunding", date: "22/7", dest: "2 857", ouv: "16,52 %", clics: "4,2 %",  dons: "5",  collecte: "876,00 €",   moyen: "175,20 €" },
+      { objet: "Donnez une seconde vie au cèdre d'Elie Wiesel !",        type: "Crowdfunding", date: "20/7", dest: "4 917", ouv: "46,27 %", clics: "9,88 %",  dons: "15", collecte: "1 128,00 €", moyen: "75,20 €"  },
+      { objet: "Une nouvelle vie pour le cèdre d'Elie Wiesel !",         type: "Crowdfunding", date: "22/7", dest: "2 857", ouv: "16,52 %", clics: "25,33 %", dons: "5",  collecte: "876,00 €",   moyen: "175,20 €" },
+      { objet: "Le projet a atteint 50 % de son objectif de financement", type: "Crowdfunding", date: "27/7", dest: "4 921", ouv: "46,76 %", clics: "6,77 %",  dons: "19", collecte: "2 224,00 €", moyen: "117,05 €" },
     ],
-    emails_total: { dest: "7 774", dons: "20", collecte: "2 004,00 €", moyen: "100,20 €" },
+    emails_total: { dest: "12 695", dons: "39", collecte: "4 228,00 €", moyen: "108,41 €" },
     emails_pending: false,
   },
   Août: {
     annee: "2026", periode: "Janv.–Août", ytd_label: "Janv.–Août",
-    ose:      { raw: 24636.80, dons: 165 },
+    ose:      { raw: 24686.80, dons: 166 },
     fond:     { raw:  4000.00, dons:   1 },
-    ytd_ose:  { raw: 265971.76, dons: 1647 },
+    ytd_ose:  { raw: 266321.70, dons: 1649 },
     ytd_fond: { raw: 557788.00, dons:  292 },
     emails: [
       { objet: "🚩 Plus de 500€ pour financer le projet !", type: "Crowdfunding", date: "20/8", dest: "1 347", ouv: "60,52 %", clics: "4,91 %", dons: "12", collecte: "1 962,00 €", moyen: "163,50 €" },
@@ -666,13 +667,20 @@ const MOIS_DATA = {
   },
   Septembre: {
     annee: "2026", periode: "Janv.–Sept.", ytd_label: "Janv.–Sept.",
-    ose:      { raw: 76558.42, dons: 387 },
+    ose:      { raw: 93221.94, dons: 421 },
     fond:     { raw:     0.00, dons:   0 },
-    ytd_ose:  { raw: 342530.18, dons: 2034 },
+    ytd_ose:  { raw: 359543.64, dons: 2070 },
     ytd_fond: { raw: 557788.00, dons:  292 },
     emails: [], emails_pending: true,
   },
-  Octobre:    { annee: "2026", periode: "Janv.–Oct.",     ytd_label: "Janv.–Oct.",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
+  Octobre: {
+    annee: "2026", periode: "Janv.–Oct.", ytd_label: "Janv.–Oct.",
+    ose:      { raw: 54758.40, dons: 185 },
+    fond:     { raw:  3500.00, dons:   1 },
+    ytd_ose:  { raw: 414302.04, dons: 2255 },
+    ytd_fond: { raw: 561288.00, dons:  293 },
+    emails: [], emails_pending: true,
+  },
   Novembre:   { annee: "2026", periode: "Janv.–Nov.",     ytd_label: "Janv.–Nov.",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
   Décembre:   { annee: "2026", periode: "Janv.–Déc.",     ytd_label: "Janv.–Déc.",     pending: true, ose: { raw: null, dons: null }, fond: { raw: null, dons: null }, ytd_ose: { raw: null, dons: null }, ytd_fond: { raw: null, dons: null }, emails: [], emails_pending: true },
 };
@@ -682,7 +690,7 @@ const MOIS_DATA = {
 // ═══════════════════════════════════════════════════════════════
 const MOIS_ORDER  = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 const MOIS_ABBR   = { "Janvier": "Janv.", "Février": "Févr.", "Mars": "Mars", "Avril": "Avr.", "Mai": "Mai", "Juin": "Juin", "Juillet": "Juil.", "Août": "Août", "Septembre": "Sept.", "Octobre": "Oct.", "Novembre": "Nov.", "Décembre": "Déc." };
-const BADGE_CLASS = { "Evènement": "badge-event", "Crowdfunding": "badge-crowd", "Campagne": "badge-campaign" };
+const BADGE_CLASS = { "Evènement": "badge-event", "Crowdfunding": "badge-crowd", "Campagne": "badge-campaign", "Fête juive": "badge-fete" };
 
 // ═══════════════════════════════════════════════════════════════
 //  RFM — données de segmentation mensuelle
@@ -1150,7 +1158,7 @@ function renderRFM(mois) {
 }
 
 // ── State ─────────────────────────────────────────────────────
-let currentMois   = "Septembre";
+let currentMois   = "Octobre";
 let currentFilter = "total";
 let refYear       = 2025;
 let tempoRefYear  = 2025;
@@ -1415,7 +1423,7 @@ function applyEmailColors() {
   });
 }
 
-render('Septembre');
+render('Octobre');
 </script>
 </body>
 </html>
